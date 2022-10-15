@@ -10,6 +10,7 @@ pub struct ProjectProperties {
     pub project_version: String,
     pub authors: Vec<String>,
 
+    pub language: String,
     pub src_dir: String,
 }
 

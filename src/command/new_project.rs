@@ -19,6 +19,7 @@ pub fn initialize_project(sub_path: Option<String>) {
             authors: project_authors.trim().split(',').map(|f| f.trim().to_string()).collect(),
             ccake_version: CCAKE_VERSION.to_string(),
 
+            language: "C++".to_string(),
             src_dir: "src".to_string()
         },
         compiler_properties: config::CompilerProperties {
