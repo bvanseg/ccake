@@ -10,6 +10,16 @@ mod terminal;
 
 const CCAKE_VERSION: &str = "1.0.0";
 
+fn list_help() {
+    println!("CCake Help");
+    println!("usage: ccake [--help] <command> [<args>]");
+    println!("");
+    println!("Project Management:");
+    terminal::format::print_command_help_line("new", "Create a new project within a new folder.");
+    terminal::format::print_command_help_line("init", "Create a new project in the current directory.");
+    terminal::format::print_command_help_line("build", "Builds the project in the current directory.");
+}
+
 fn main() {
     // By default, ansi is not supported in Windows terminals. It must be enabled through Window's native API.
     enable_ansi_support().expect("Failed to enable ansi support for Windows!");
@@ -21,7 +31,8 @@ fn main() {
         match argument_as_str.as_str() {
             "new" => initialize_project(args.next()),
             "init" => initialize_project(None),
-            "build" | "bake" => build_project(),
+            "build" => build_project(),
+            "--help" | "-h" => list_help(),
             _ => ()
         }
     }
