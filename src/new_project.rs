@@ -14,10 +14,14 @@ pub fn create_new_project() {
     let project_authors = prompt(ansi_project_authors);
 
     let config = config::Config {
-        metadata: config::ProjectMetadata {
+        project_properties: config::ProjectProperties {
             project_name: project_name.trim().to_string(),
             project_version: project_version.trim().to_string(),
-            authors: project_authors.trim().split(',').map(|f| f.trim().to_owned()).collect()
+            authors: project_authors.trim().split(',').map(|f| f.trim().to_string()).collect(),
+            ccake_version: super::CCAKE_VERSION.to_string(),
+        },
+        compiler_properties: config::CompilerProperties {
+            compiler_dir: "/path/to/compiler".to_string()
         }
     };
 

@@ -4,15 +4,22 @@ use serde_derive::{Deserialize, Serialize};
 const CCAKE_CONFIG_FILE_NAME: &str = "ccake.toml";
 
 #[derive(Debug, Deserialize, Serialize)]
-pub struct ProjectMetadata {
+pub struct ProjectProperties {
+    pub ccake_version: String,
     pub project_name: String,
     pub project_version: String,
     pub authors: Vec<String>,
 }
 
 #[derive(Debug, Deserialize, Serialize)]
+pub struct CompilerProperties {
+    pub compiler_dir: String
+}
+
+#[derive(Debug, Deserialize, Serialize)]
 pub struct Config {
-    pub metadata: ProjectMetadata,
+    pub project_properties: ProjectProperties,
+    pub compiler_properties: CompilerProperties
 }
 
 pub fn read_config() -> Config {
@@ -24,9 +31,9 @@ pub fn read_config() -> Config {
     let config: Config = toml::from_str(&file_content).expect("Failed to deserialize content from ccake.toml file!");
 
     // TODO: Remove these println macro calls.
-    println!("Project Name: {}", config.metadata.project_name);
-    println!("Project Version: {}", config.metadata.project_version);
-    println!("Project Author: {:?}", config.metadata.authors);
+    println!("Project Name: {}", config.project_properties.project_name);
+    println!("Project Version: {}", config.project_properties.project_version);
+    println!("Project Author: {:?}", config.project_properties.authors);
 
     return config;
 }

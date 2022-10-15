@@ -10,6 +10,8 @@ mod new_project;
 mod terminal;
 mod windows;
 
+const CCAKE_VERSION: &str = "1.0.0";
+
 fn main() {
     // By default, ansi is not supported in Windows terminals. It must be enabled through Window's native API.
     enable_ansi_support().expect("Failed to enable ansi support for Windows!");
