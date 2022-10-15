@@ -1,16 +1,12 @@
 use std::env;
 
-use crate::build_project::build_project;
-use crate::new_project::initialize_project;
-use crate::terminal::ansi;
-use crate::terminal::prompt::{prompt};
-use crate::windows::enable_ansi_support;
+use crate::command::build_project::build_project;
+use crate::command::new_project::initialize_project;
+use crate::terminal::windows::enable_ansi_support;
 
-mod build_project;
+mod command;
 mod config;
-mod new_project;
 mod terminal;
-mod windows;
 
 const CCAKE_VERSION: &str = "1.0.0";
 

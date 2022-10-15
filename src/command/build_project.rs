@@ -1,7 +1,6 @@
 use std::io::Write;
 use walkdir::WalkDir;
-use crate::terminal::ansi;
-use super::config;
+use crate::{terminal::ansi, config};
 
 pub fn build_project() {
     let config = config::read_config();
