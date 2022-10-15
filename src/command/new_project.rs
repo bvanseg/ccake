@@ -20,6 +20,7 @@ pub fn initialize_project(sub_path: Option<String>) {
             ccake_version: CCAKE_VERSION.to_string(),
 
             language: "C++".to_string(),
+            project_type: config::ProjectType::Binary,
             src_dir: "src".to_string()
         },
         compiler_properties: config::CompilerProperties {

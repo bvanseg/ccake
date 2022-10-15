@@ -4,6 +4,12 @@ use serde_derive::{Deserialize, Serialize};
 const CCAKE_CONFIG_FILE_NAME: &str = "ccake.toml";
 
 #[derive(Debug, Deserialize, Serialize)]
+pub enum ProjectType {
+    Binary,
+    Library
+}
+
+#[derive(Debug, Deserialize, Serialize)]
 pub struct ProjectProperties {
     pub ccake_version: String,
     pub project_name: String,
@@ -11,6 +17,7 @@ pub struct ProjectProperties {
     pub authors: Vec<String>,
 
     pub language: String,
+    pub project_type: ProjectType,
     pub src_dir: String,
 }
 
