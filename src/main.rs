@@ -5,6 +5,7 @@ use crate::terminal::ansi;
 use crate::terminal::prompt::{prompt};
 use crate::windows::enable_ansi_support;
 
+mod config;
 mod new_project;
 mod terminal;
 mod windows;
@@ -18,6 +19,11 @@ fn main() {
 
     // Output args in debug.
     // dbg!(args);
+
+    let config = config::read_config();
+
+    // TODO: Remove this.
+    println!("{:?}", config);
 
     for argument in args {
         let argument_as_str = argument.as_str();

@@ -7,6 +7,8 @@ edition = "2021"
 
 [dependencies]
 toml = "0.5.9"
+serde = "1.0.145"
+serde_derive = "1.0.145"
 
 [target.'cfg(target_os="windows")'.dependencies.winapi]
 version = "0.3.4"
