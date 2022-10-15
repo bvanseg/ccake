@@ -33,6 +33,7 @@ fn main() {
             "init" => initialize_project(None),
             "build" => build_project(),
             "--help" | "-h" => list_help(),
+            "--version" | "-v" => println!("ccake version {}", CCAKE_VERSION),
             _ => ()
         }
     }
