@@ -1,10 +1,11 @@
 use std::env;
-use std::io;
-use std::io::Write;
 
+use crate::new_project::create_new_project;
 use crate::terminal::ansi;
+use crate::terminal::prompt::{prompt};
 use crate::windows::enable_ansi_support;
 
+mod new_project;
 mod terminal;
 mod windows;
 
@@ -18,21 +19,13 @@ fn main() {
     // Output args in debug.
     // dbg!(args);
 
-    // TODO: Check command arguments.
-
-    let ansi_project_name = ansi::ANSI_CHOICE_STYLE.apply("Project Name:");
-
-    // TODO: Move the lines below this one out to some helper function for receiving inline, labeled input from a user.
-
-    // Prompt for a project name and flush to stdout.
-    print!("{} ", ansi_project_name);
-    io::stdout()
-        .flush()
-        .expect("Failed to flush standard output buffer!");
-
-    // Capture input in response to previous project name prompt.s
-    let buffer = &mut String::new();
-    io::stdin()
-        .read_line(buffer)
-        .expect("Unable to read input.");
+    for argument in args {
+        let argument_as_str = argument.as_str();
+        match argument_as_str {
+            "new" => create_new_project(),
+            "init" => (), // TODO
+            "build" => (), // TODO
+            _ => ()
+        }
+    }
 }
