@@ -1,10 +1,12 @@
 use std::env;
 
-use crate::new_project::create_new_project;
+use crate::build_project::build_project;
+use crate::new_project::initialize_project;
 use crate::terminal::ansi;
 use crate::terminal::prompt::{prompt};
 use crate::windows::enable_ansi_support;
 
+mod build_project;
 mod config;
 mod new_project;
 mod terminal;
@@ -17,22 +19,13 @@ fn main() {
     enable_ansi_support().expect("Failed to enable ansi support for Windows!");
 
     // Collect command line arguments ran through ccake.
-    let args: Vec<String> = env::args().collect();
+    let mut args = env::args();
 
-    // Output args in debug.
-    // dbg!(args);
-
-    let config = config::read_config();
-
-    // TODO: Remove this.
-    println!("{:?}", config);
-
-    for argument in args {
-        let argument_as_str = argument.as_str();
-        match argument_as_str {
-            "new" => create_new_project(),
-            "init" => (), // TODO
-            "build" => (), // TODO
+    while let Some(argument_as_str) = args.next() {
+        match argument_as_str.as_str() {
+            "new" => initialize_project(args.next()),
+            "init" => initialize_project(None),
+            "build" => build_project(),
             _ => ()
         }
     }

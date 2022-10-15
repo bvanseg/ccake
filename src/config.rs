@@ -9,6 +9,8 @@ pub struct ProjectProperties {
     pub project_name: String,
     pub project_version: String,
     pub authors: Vec<String>,
+
+    pub src_dir: String,
 }
 
 #[derive(Debug, Deserialize, Serialize)]
@@ -28,17 +30,19 @@ pub fn read_config() -> Config {
     let mut file_content = String::new();
     file.read_to_string(&mut file_content).expect("Failed to read contents of ccake.toml file!");
 
-    let config: Config = toml::from_str(&file_content).expect("Failed to deserialize content from ccake.toml file!");
-
-    // TODO: Remove these println macro calls.
-    println!("Project Name: {}", config.project_properties.project_name);
-    println!("Project Version: {}", config.project_properties.project_version);
-    println!("Project Author: {:?}", config.project_properties.authors);
-
-    return config;
+    return toml::from_str(&file_content).expect("Failed to deserialize content from ccake.toml file!");
 }
 
-pub fn write_config(config: &Config) {
+pub fn write_config(config: &Config, sub_path: Option<String>) {
     let config_as_str = toml::to_string(&config).expect("Failed to serialize config to string!");
+
+
+    if let Some(path) = sub_path {
+        let ccake_path = format!("{}{}{}", path, "/", CCAKE_CONFIG_FILE_NAME);
+        std::fs::create_dir_all(path).expect("Failed to create directories to ccake.toml path!");
+        std::fs::write(ccake_path, config_as_str).expect("Failed to write to ccake.toml file!");
+        return;
+    }
+
     std::fs::write(CCAKE_CONFIG_FILE_NAME, config_as_str).expect("Failed to write to ccake.toml file!");
 }

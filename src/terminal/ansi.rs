@@ -14,6 +14,13 @@ pub const ANSI_CHOICE_STYLE: AnsiStyle = AnsiStyle {
     underline: true 
 };
 
+pub const ANSI_ERROR_STYLE: AnsiStyle = AnsiStyle {
+    foreground_color: AnsiColor::Red,
+    bold: true,
+    italicize: false,
+    underline: false 
+};
+
 pub enum AnsiColor {
     Black,
     Green,

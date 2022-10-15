@@ -9,6 +9,7 @@ edition = "2021"
 toml = "0.5.9"
 serde = "1.0.145"
 serde_derive = "1.0.145"
+walkdir = "2.3.2"
 
 [target.'cfg(target_os="windows")'.dependencies.winapi]
 version = "0.3.4"
