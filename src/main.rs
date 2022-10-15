@@ -21,7 +21,7 @@ fn main() {
         match argument_as_str.as_str() {
             "new" => initialize_project(args.next()),
             "init" => initialize_project(None),
-            "build" => build_project(),
+            "build" | "bake" => build_project(),
             _ => ()
         }
     }
