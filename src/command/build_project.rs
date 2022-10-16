@@ -8,14 +8,20 @@ pub fn build_project() {
     run_compiler(&config);
 }
 
-fn collect_c_file_paths(src_dir: &String) -> Vec<String> {
+fn collect_c_file_paths(config: &config::Config, src_dir: &String) -> Vec<String> {
     let mut vec: Vec<String> = Vec::new();
+
+    let target_extension = match config.project_properties.language.to_lowercase().as_str() {
+        "c" => ".c",
+        "c++" | "cpp" => ".cpp",
+        _ => panic!("Unknown project language specified in ccake.toml!")
+    };
 
     let walker = WalkDir::new(src_dir)
         .into_iter()
         .filter_entry(|p| {
             let path_str = p.file_name().to_string_lossy();
-            path_str.starts_with(src_dir) || path_str.ends_with(".c") == true
+            path_str.starts_with(src_dir) || path_str.ends_with(target_extension) == true
         })
         .filter_map(|r| r.ok());
 
@@ -42,7 +48,7 @@ fn run_compiler(config: &config::Config) {
     }.into_iter().map(String::from).collect();
     
     // Collect C source files for inputting into the compiler.
-    let c_files = &mut collect_c_file_paths(&config.project_properties.src_dir);
+    let c_files = &mut collect_c_file_paths(&config, &config.project_properties.src_dir);
     project_args.append(c_files);
 
     // Run the compiler executable.
