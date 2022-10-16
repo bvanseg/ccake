@@ -10,6 +10,9 @@ mod terminal;
 
 const CCAKE_VERSION: &str = "1.0.0";
 
+static HELLO_C: &str = include_str!("../res/hello.c");
+static HELLO_CPP: &str = include_str!("../res/hello.cpp");
+
 fn list_help() {
     println!("CCake Help");
     println!("usage: ccake [--help, --version] <command> [<args>]\n");
