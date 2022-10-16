@@ -12,8 +12,7 @@ const CCAKE_VERSION: &str = "1.0.0";
 
 fn list_help() {
     println!("CCake Help");
-    println!("usage: ccake [--help] <command> [<args>]");
-    println!("");
+    println!("usage: ccake [--help, --version] <command> [<args>]\n");
     println!("Project Management:");
     terminal::format::print_command_help_line("new", "Create a new project within a new folder.");
     terminal::format::print_command_help_line("init", "Create a new project in the current directory.");
