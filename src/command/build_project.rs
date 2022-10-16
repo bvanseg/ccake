@@ -47,9 +47,11 @@ fn run_compiler(config: &config::Config) {
         config::ProjectType::Library => "library.dll"
     };
 
+    let out_dir = &config.project_properties.out_dir.to_owned().unwrap_or_else(|| "out".to_string());
+
     // TODO: There has got to be a better/safer way of doing this...
     let out_file_path = std::path::Path::new("")
-        .join(&config.project_properties.out_dir);
+        .join(out_dir);
 
         std::fs::create_dir_all(&out_file_path).expect("Failed to create output directories for compiler output file!");
 
@@ -65,8 +67,8 @@ fn run_compiler(config: &config::Config) {
     }.into_iter().map(String::from).collect();
     
     // Collect C source files for inputting into the compiler.
-    let c_files = &mut collect_c_file_paths(&config, &config.project_properties.src_dir);
-    
+    let src_dir = &config.project_properties.src_dir.to_owned().unwrap_or_else(|| "src".to_string());
+    let c_files = &mut collect_c_file_paths(&config, src_dir);
     project_args.append(c_files);
 
     // Try to append compiler arguments from config's compiler_args property.

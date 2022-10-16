@@ -18,8 +18,8 @@ pub struct ProjectProperties {
 
     pub language: String,
     pub project_type: ProjectType,
-    pub src_dir: String,
-    pub out_dir: String
+    pub src_dir: Option<String>,
+    pub out_dir: Option<String>
 }
 
 #[derive(Debug, Deserialize, Serialize)]

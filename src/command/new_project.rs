@@ -21,8 +21,8 @@ pub fn initialize_project(sub_path: Option<String>) {
 
             language: "C++".to_string(),
             project_type: config::ProjectType::Binary,
-            src_dir: "src".to_string(),
-            out_dir: "out".to_string()
+            src_dir: None,
+            out_dir: None
         },
         compiler_properties: config::CompilerProperties {
             compiler_dir: "/path/to/compiler".to_string(),
