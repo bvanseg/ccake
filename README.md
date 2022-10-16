@@ -3,7 +3,7 @@ CCake is a command line tool written in Rust and designed to be a modern build t
 
 ## Goals
 - To be easily understood by and accessible to beginner C/C++ developers.
-- To familiarize beginner C/C++ developers with how C/C++'s build steps (preprocessing, compiling, linking, assembling, etc.).
+- To familiarize beginner C/C++ developers with how C/C++'s build steps (preprocessing, compiling, linking, assembling, etc.) work.
 - To keep CCake expressive in such a way that it feels familiar with other build and packaging tools such as `npm`, `yarn`, `gradle` and `cargo`.
 - To make CCake cross-platform.
 - To streamline the file structure for C/C++ projects into a more modern design pattern becoming increasingly and commonly used throughout the industry.
