@@ -1,0 +1,13 @@
+[project_properties]
+ccake_version = "1.0.0"
+
+project_name = "Sample C++ Project"
+project_version = "1.0.0"
+authors = ["Boston Vanseghi"]
+
+language = "C++"
+project_type = "Binary"
+
+[compiler_properties]
+# Change this to wherever your compiler resides on your machine.
+compiler_dir = "C:\\Program Files\\LLVM\\bin\\clang.exe"
