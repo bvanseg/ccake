@@ -22,17 +22,15 @@ pub const ANSI_ERROR_STYLE: AnsiStyle = AnsiStyle {
 };
 
 pub enum AnsiColor {
-    Black,
     Green,
     Red,
     White
 }
 
-// AMSI codes generously provided from https://gist.github.com/JBlond/2fea43a3049b38287e5e9cefc87b2124
+// ANSI codes generously provided from https://gist.github.com/JBlond/2fea43a3049b38287e5e9cefc87b2124
 impl AnsiColor {
     const fn hex_string(&self) -> &'static str {
         match self {
-            AnsiColor::Black => "30m",
             AnsiColor::Red => "31m",
             AnsiColor::Green => "32m",
             AnsiColor::White => "37m"
@@ -48,37 +46,8 @@ pub struct AnsiStyle {
 }
 
 impl AnsiStyle {
-    pub fn new() -> Self {
-        AnsiStyle {
-            foreground_color: AnsiColor::White,
-            bold: false,
-            italicize: false,
-            underline: false
-        }
-    }
-
     pub fn apply(self, text: &str) -> AnsiString {
         AnsiString::from(text, self)
-    }
-
-    pub fn bold(mut self) -> Self {
-        self.bold = true;
-        self
-    }
-
-    pub fn color(mut self, foreground_color: AnsiColor) -> Self {
-        self.foreground_color = foreground_color;
-        self
-    }
-
-    pub fn italicize(mut self) -> Self {
-        self.italicize = true;
-        self
-    }
-
-    pub fn underline(mut self) -> Self {
-        self.underline = true;
-        self
     }
 }
 
@@ -92,18 +61,6 @@ impl AnsiString {
         AnsiString {
             text: text.to_string(),
             style: style
-        }
-    }
-
-    pub fn with_default_style(text: &str) -> Self {
-        AnsiString {
-            text: text.to_string(),
-            style: AnsiStyle {
-                foreground_color: AnsiColor::White,
-                bold: false,
-                italicize: false,
-                underline: false
-            }
         }
     }
 
