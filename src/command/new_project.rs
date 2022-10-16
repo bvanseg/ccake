@@ -24,7 +24,8 @@ pub fn initialize_project(sub_path: Option<String>) {
             src_dir: "src".to_string()
         },
         compiler_properties: config::CompilerProperties {
-            compiler_dir: "/path/to/compiler".to_string()
+            compiler_dir: "/path/to/compiler".to_string(),
+            compiler_args: None
         }
     };
 

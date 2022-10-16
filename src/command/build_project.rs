@@ -49,7 +49,14 @@ fn run_compiler(config: &config::Config) {
     
     // Collect C source files for inputting into the compiler.
     let c_files = &mut collect_c_file_paths(&config, &config.project_properties.src_dir);
+    
     project_args.append(c_files);
+
+    // Try to append compiler arguments from config's compiler_args property.
+    if let Some(compiler_args) = &config.compiler_properties.compiler_args {
+        let mut split_args: Vec<String> = compiler_args.split_whitespace().into_iter().map(String::from).collect();
+        project_args.append(&mut split_args);
+    }
 
     // Run the compiler executable.
     let output = std::process::Command::new(&config.compiler_properties.compiler_dir)
