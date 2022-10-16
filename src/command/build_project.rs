@@ -41,10 +41,27 @@ fn collect_c_file_paths(config: &config::Config, src_dir: &String) -> Vec<String
 fn run_compiler(config: &config::Config) {
     // TODO: Prepend output dir to file names here.
     // TODO: These file names should be based on the ccake.toml properties.
+
+    let out_file = match config.project_properties.project_type {
+        config::ProjectType::Binary => "app.exe",
+        config::ProjectType::Library => "library.dll"
+    };
+
+    // TODO: There has got to be a better/safer way of doing this...
+    let out_file_path = std::path::Path::new("")
+        .join(&config.project_properties.out_dir);
+
+        std::fs::create_dir_all(&out_file_path).expect("Failed to create output directories for compiler output file!");
+
+    let out_file_path = out_file_path.join(out_file);
+
+    let out_file_path_str = out_file_path.into_os_string().into_string().unwrap();
+
+
     let mut project_args: Vec<String> = match config.project_properties.project_type {
-        config::ProjectType::Binary => vec!["-o", "app.exe"], // TODO: This shouldn't be .exe.
+        config::ProjectType::Binary => vec!["-o", out_file_path_str.as_str()], // TODO: This shouldn't be .exe.
         // TODO: For library building, there should be a way to distinguish static and dynamic libraries.
-        config::ProjectType::Library => vec!["-shared", "-o", "library.dll"] // TODO: This shouldn't be .dll.
+        config::ProjectType::Library => vec!["-shared", "-o", out_file_path_str.as_str()] // TODO: This shouldn't be .dll.
     }.into_iter().map(String::from).collect();
     
     // Collect C source files for inputting into the compiler.

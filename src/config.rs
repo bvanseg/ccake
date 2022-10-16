@@ -19,6 +19,7 @@ pub struct ProjectProperties {
     pub language: String,
     pub project_type: ProjectType,
     pub src_dir: String,
+    pub out_dir: String
 }
 
 #[derive(Debug, Deserialize, Serialize)]
@@ -44,7 +45,6 @@ pub fn read_config() -> Config {
 
 pub fn write_config(config: &Config, sub_path: Option<String>) {
     let config_as_str = toml::to_string(&config).expect("Failed to serialize config to string!");
-
 
     if let Some(path) = sub_path {
         let ccake_path = format!("{}{}{}", path, "/", CCAKE_CONFIG_FILE_NAME);
