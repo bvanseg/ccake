@@ -1,3 +1,4 @@
 /target
-ccake.toml
+/ccake.toml
 *.exe
+*.dll
