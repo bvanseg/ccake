@@ -18,6 +18,7 @@ fn main() {
         .version(crate_version!())
         .subcommand(
             Command::new("new")
+                .about("Creates a new C/C++ project.")
                 .arg(
                     Arg::new("folder")
                         .required(true)
@@ -26,9 +27,11 @@ fn main() {
         )
         .subcommand(
             Command::new("init")
+                .about("Creates a new C/C++ project within the current directory.")
         )
         .subcommand(
             Command::new("build")
+                .about("Builds the existing C/C++ project within the current directory.")
         );
 
     let matches = command.get_matches();
