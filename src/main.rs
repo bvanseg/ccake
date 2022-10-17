@@ -1,5 +1,6 @@
 use crate::command::build_project::build_project;
 use crate::command::new_project::initialize_project;
+use crate::command::install::install;
 use crate::terminal::windows::enable_ansi_support;
 
 use clap::{Command, Arg, crate_authors, crate_description, crate_name, crate_version};
@@ -32,6 +33,15 @@ fn main() {
         .subcommand(
             Command::new("build")
                 .about("Builds the existing C/C++ project within the current directory.")
+        )
+        .subcommand(
+            Command::new("install")
+                .about("Installs a tool or library.")
+                .arg(
+                    Arg::new("tool-library-name")
+                        .required(true)
+                        .help("The name of the tool or library to install.")
+                )
         );
 
     let matches = command.get_matches();
@@ -42,6 +52,7 @@ fn main() {
         Some(("new", arg_matches)) => initialize_project(arg_matches.get_one::<String>("folder")),
         Some(("init", _)) => initialize_project(None),
         Some(("build", _)) => build_project(),
+        Some(("install", arg_matches)) => install(arg_matches.get_one::<String>("tool-library-name")),
         Some((_, _)) => (),
         None => ()
     }
