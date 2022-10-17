@@ -43,7 +43,7 @@ pub fn read_config() -> Config {
     return toml::from_str(&file_content).expect("Failed to deserialize content from ccake.toml file!");
 }
 
-pub fn write_config(config: &Config, sub_path: &Option<String>) {
+pub fn write_config(config: &Config, sub_path: &Option<&String>) {
     let config_as_str = toml::to_string(&config).expect("Failed to serialize config to string!");
 
     if let Some(path) = sub_path {

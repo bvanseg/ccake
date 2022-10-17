@@ -3,6 +3,11 @@ name = "ccake"
 version = "0.1.0"
 edition = "2021"
 
+authors = [
+    "Boston Vanseghi, bvanseg@gmail.com"
+]
+description = "CCake is a tool to make C/C++ project building and packagement a piece of cake."
+
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
@@ -10,6 +15,7 @@ toml = "0.5.9"
 serde = "1.0.145"
 serde_derive = "1.0.145"
 walkdir = "2.3.2"
+clap = { version = "4.0.15", features = ["cargo", "derive"] }
 
 [target.'cfg(target_os="windows")'.dependencies.winapi]
 version = "0.3.4"

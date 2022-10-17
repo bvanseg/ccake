@@ -3,7 +3,7 @@ use crate::config::write_config;
 use crate::terminal::ansi;
 use crate::terminal::prompt::prompt;
 
-pub fn initialize_project(sub_path: Option<String>) {
+pub fn initialize_project(sub_path: Option<&String>) {
     let ansi_project_name = ansi::ANSI_CHOICE_STYLE.apply("Project Name:");
     let ansi_project_version = ansi::ANSI_CHOICE_STYLE.apply("Version:");
     let ansi_project_authors = ansi::ANSI_CHOICE_STYLE.apply("Authors:");
@@ -33,12 +33,12 @@ pub fn initialize_project(sub_path: Option<String>) {
     write_project_files(&config, sub_path);
 }
 
-fn write_project_files(config: &config::Config, sub_path: Option<String>) {
+fn write_project_files(config: &config::Config, sub_path: Option<&String>) {
     write_config(config, &sub_path);
     write_hello_world(config, &sub_path);
 }
 
-fn write_hello_world(config: &config::Config, sub_path: &Option<String>) {
+fn write_hello_world(config: &config::Config, sub_path: &Option<&String>) {
     let src_dir = config.project_properties.src_dir.to_owned().unwrap_or_else(|| "src".to_string());
 
     let lowercase_language = config.project_properties.language.to_lowercase();

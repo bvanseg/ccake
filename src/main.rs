@@ -1,8 +1,8 @@
-use std::env;
-
 use crate::command::build_project::build_project;
 use crate::command::new_project::initialize_project;
 use crate::terminal::windows::enable_ansi_support;
+
+use clap::{Command, Arg, crate_authors, crate_description, crate_name, crate_version};
 
 mod command;
 mod config;
@@ -13,30 +13,35 @@ const CCAKE_VERSION: &str = "1.0.0";
 static HELLO_C: &str = include_str!("../res/hello.c");
 static HELLO_CPP: &str = include_str!("../res/hello.cpp");
 
-fn list_help() {
-    println!("CCake Help");
-    println!("usage: ccake [--help, --version] <command> [<args>]\n");
-    println!("Project Management:");
-    terminal::format::print_command_help_line("new", "Create a new project within a new folder.");
-    terminal::format::print_command_help_line("init", "Create a new project in the current directory.");
-    terminal::format::print_command_help_line("build", "Builds the project in the current directory.");
-}
-
 fn main() {
-    // By default, ansi is not supported in Windows terminals. It must be enabled through Window's native API.
+    let command = Command::new(crate_name!())
+        .author(crate_authors!("\n"))
+        .about(crate_description!())
+        .version(crate_version!())
+        .subcommand(
+            Command::new("new")
+                .arg(
+                    Arg::new("folder")
+                        .required(true)
+                        .help("The folder to create for the new project.")
+                )
+        )
+        .subcommand(
+            Command::new("init")
+        )
+        .subcommand(
+            Command::new("build")
+        );
+
+    let matches = command.get_matches();
+
     enable_ansi_support().expect("Failed to enable ansi support for Windows!");
 
-    // Collect command line arguments ran through ccake.
-    let mut args = env::args();
-
-    while let Some(argument_as_str) = args.next() {
-        match argument_as_str.as_str() {
-            "new" => initialize_project(args.next()),
-            "init" => initialize_project(None),
-            "build" => build_project(),
-            "--help" | "-h" => list_help(),
-            "--version" | "-v" => println!("ccake version {}", CCAKE_VERSION),
-            _ => ()
-        }
+    match matches.subcommand() {
+        Some(("new", arg_matches)) => initialize_project(arg_matches.get_one::<String>("folder")),
+        Some(("init", _)) => initialize_project(None),
+        Some(("build", _)) => build_project(),
+        Some((_, _)) => (),
+        None => ()
     }
 }
