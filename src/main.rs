@@ -8,8 +8,6 @@ mod command;
 mod config;
 mod terminal;
 
-const CCAKE_VERSION: &str = "1.0.0";
-
 static HELLO_C: &str = include_str!("../res/hello.c");
 static HELLO_CPP: &str = include_str!("../res/hello.cpp");
 

@@ -1,5 +1,5 @@
 [project_properties]
-ccake_version = "1.0.0"
+ccake_version = "0.1.0"
 
 project_name = "Sample C++ Project"
 project_version = "1.0.0"

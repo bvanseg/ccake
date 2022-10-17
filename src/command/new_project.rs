@@ -1,4 +1,6 @@
-use crate::{config, CCAKE_VERSION, HELLO_C, HELLO_CPP};
+use clap::crate_version;
+
+use crate::{config, HELLO_C, HELLO_CPP};
 use crate::config::write_config;
 use crate::terminal::ansi;
 use crate::terminal::prompt::prompt;
@@ -17,7 +19,7 @@ pub fn initialize_project(sub_path: Option<&String>) {
             project_name: project_name.trim().to_string(),
             project_version: project_version.trim().to_string(),
             authors: project_authors.trim().split(',').map(|f| f.trim().to_string()).collect(),
-            ccake_version: CCAKE_VERSION.to_string(),
+            ccake_version: crate_version!().to_string(),
 
             language: "C++".to_string(),
             project_type: config::ProjectType::Binary,
