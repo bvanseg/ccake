@@ -1,4 +1,4 @@
-use crate::command::build_project::build_project;
+use crate::{command::build_project::build_project};
 use crate::command::configure::configure;
 use crate::command::new_project::initialize_project;
 use crate::command::install::install;

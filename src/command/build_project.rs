@@ -1,6 +1,6 @@
 use std::{io::Write, path::Path};
 use walkdir::WalkDir;
-use crate::{terminal::ansi, config, settings};
+use crate::{terminal::ansi::{AnsiString, ANSI_ERROR_STYLE}, config, settings};
 
 pub fn build_project() {
     let config = config::read_config();
@@ -98,11 +98,11 @@ fn run_compiler(config: &config::Config) {
 
     // If there was standard output from the compiler, emit it.
     let standard_output = &String::from_utf8(output.stdout).expect("Failed to convert output stdout to String!");
-    let ansi_standard_output = ansi::ANSI_DEFAULT_STYLE.apply(standard_output);
+    let ansi_standard_output = AnsiString::from_styles_vec(standard_output, vec![]);
     std::io::stdout().write_all(&ansi_standard_output.as_string().as_bytes()).unwrap();
 
     // If there was erroroneous output from the compiler, emit it.
     let error_output = &String::from_utf8(output.stderr).expect("Failed to convert output stderr to String!");
-    let ansi_err_output = ansi::ANSI_ERROR_STYLE.apply(error_output);
+    let ansi_err_output = AnsiString::from_styles_arr(error_output, &ANSI_ERROR_STYLE);
     std::io::stderr().write_all(&ansi_err_output.as_string().as_bytes()).unwrap();
 }

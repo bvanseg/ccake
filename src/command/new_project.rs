@@ -2,13 +2,13 @@ use clap::crate_version;
 
 use crate::{config, HELLO_C, HELLO_CPP};
 use crate::config::write_config;
-use crate::terminal::ansi;
+use crate::terminal::ansi::{self, AnsiString};
 use crate::terminal::prompt::prompt;
 
 pub fn initialize_project(sub_path: Option<&String>) {
-    let ansi_project_name = ansi::ANSI_CHOICE_STYLE.apply("Project Name:");
-    let ansi_project_version = ansi::ANSI_CHOICE_STYLE.apply("Version:");
-    let ansi_project_authors = ansi::ANSI_CHOICE_STYLE.apply("Authors:");
+    let ansi_project_name = AnsiString::from_styles_arr("Project Name:", &ansi::ANSI_CHOICE_STYLE);
+    let ansi_project_version = AnsiString::from_styles_arr("Version:", &ansi::ANSI_CHOICE_STYLE);
+    let ansi_project_authors = AnsiString::from_styles_arr("Authors:", &ansi::ANSI_CHOICE_STYLE);
 
     let project_name = prompt(ansi_project_name);
     let project_version = prompt(ansi_project_version);

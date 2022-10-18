@@ -1,80 +1,85 @@
 use std::fmt;
 
-pub const ANSI_DEFAULT_STYLE: AnsiStyle = AnsiStyle {
-    foreground_color: AnsiColor::White,
-    bold: false,
-    italicize: false,
-    underline: false 
-};
+pub const ANSI_DEFAULT_STYLE: [AnsiStyle; 3] = [AnsiStyle::Bold, AnsiStyle::Underline, AnsiStyle::ForegroundColor(AnsiColor::Green)];
+pub const ANSI_CHOICE_STYLE: [AnsiStyle; 3] = [AnsiStyle::Bold, AnsiStyle::Underline, AnsiStyle::ForegroundColor(AnsiColor::Green)];
+pub const ANSI_ERROR_STYLE: [AnsiStyle; 2] = [AnsiStyle::Bold, AnsiStyle::ForegroundColor(AnsiColor::Red)];
 
-pub const ANSI_CHOICE_STYLE: AnsiStyle = AnsiStyle {
-    foreground_color: AnsiColor::Green,
-    bold: true,
-    italicize: false,
-    underline: true 
-};
+pub enum AnsiStyle {
+    ForegroundColor(AnsiColor),
+    Bold,
+    Italics,
+    Underline
+}
 
-pub const ANSI_ERROR_STYLE: AnsiStyle = AnsiStyle {
-    foreground_color: AnsiColor::Red,
-    bold: true,
-    italicize: false,
-    underline: false 
-};
+impl AnsiStyle {
+    const fn code(&self) -> &str {
+        match self {
+            Self::ForegroundColor(color) => color.code(),
+            Self::Bold => "1",
+            Self::Italics => "3",
+            Self::Underline => "4"
+        }
+    }
+}
 
 pub enum AnsiColor {
-    Green,
+    Black,
     Red,
+    Green,
+    Yellow,
+    Blue,
+    Magenta,
+    Cyan,
     White
 }
 
 // ANSI codes generously provided from https://gist.github.com/JBlond/2fea43a3049b38287e5e9cefc87b2124
 impl AnsiColor {
-    const fn hex_string(&self) -> &'static str {
+    const fn code(&self) -> &'static str {
         match self {
-            AnsiColor::Red => "31m",
-            AnsiColor::Green => "32m",
-            AnsiColor::White => "37m"
+            AnsiColor::Black => "30",
+            AnsiColor::Red => "31",
+            AnsiColor::Green => "32",
+            AnsiColor::Yellow => "33",
+            AnsiColor::Blue => "34",
+            AnsiColor::Magenta => "35",
+            AnsiColor::Cyan => "36",
+            AnsiColor::White => "37"
         }
-    }
-}
-
-pub struct AnsiStyle {
-    pub foreground_color: AnsiColor,
-    pub bold: bool,
-    pub italicize: bool,
-    pub underline: bool
-}
-
-impl AnsiStyle {
-    pub fn apply(self, text: &str) -> AnsiString {
-        AnsiString::from(text, self)
     }
 }
 
 pub struct AnsiString {
     pub text: String,
-    pub style: AnsiStyle
+    pub styles: Vec<String>
 }
 
 impl AnsiString {
-    pub fn from(text: &str, style: AnsiStyle) -> Self {
+    pub fn from_str(text: &str, styles: Vec<&str>) -> Self {
         AnsiString {
             text: text.to_string(),
-            style: style
+            styles: styles.into_iter().map(|f| f.to_string()).collect()
+        }
+    }
+
+    pub fn from_styles_arr(text: &str, styles: &[AnsiStyle]) -> Self {
+        AnsiString {
+            text: text.to_string(),
+            styles: styles.into_iter().map(|f| f.code().to_string()).collect()
+        }
+    }
+
+    pub fn from_styles_vec(text: &str, styles: Vec<AnsiStyle>) -> Self {
+        AnsiString {
+            text: text.to_string(),
+            styles: styles.into_iter().map(|f| f.code().to_string()).collect()
         }
     }
 
     pub fn as_string(&self) -> String {
-        let bold_number = if self.style.bold { 1 } else { 0 };
-        let italicize_number = if self.style.italicize { 3 } else { 0 };
-        let underline_number = if self.style.underline { 4 } else { 0 };
-        let foreground_color_string = self.style.foreground_color.hex_string();
         format!(
-            "\x1b[{};{};{};{}{}\x1b[{}",
-            bold_number.to_string(),
-            italicize_number.to_string(),
-            underline_number.to_string(),
-            foreground_color_string,
+            "\x1b[{}m{}\x1b[{}",
+            self.styles.join(";"),
             self.text,
             "0m"
         )
