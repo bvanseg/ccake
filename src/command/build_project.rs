@@ -1,6 +1,6 @@
-use std::io::Write;
+use std::{io::Write, path::Path};
 use walkdir::WalkDir;
-use crate::{terminal::ansi, config};
+use crate::{terminal::ansi, config, settings};
 
 pub fn build_project() {
     let config = config::read_config();
@@ -77,8 +77,21 @@ fn run_compiler(config: &config::Config) {
         project_args.append(&mut split_args);
     }
 
+    let mut working_compiler_dir = config.compiler_properties.compiler_dir.clone();
+
+    // If the project compiler path does not exist, try checking the default compiler path.
+    if !Path::new(&working_compiler_dir).exists() {
+        let settings = settings::read_settings();
+
+        if !Path::new(&settings.default_compiler_dir).exists() {
+            panic!("Failed to get a working compiler path for building!");
+        } else {
+            working_compiler_dir = settings.default_compiler_dir;
+        }
+    }
+
     // Run the compiler executable.
-    let output = std::process::Command::new(&config.compiler_properties.compiler_dir)
+    let output = std::process::Command::new(&working_compiler_dir)
         .args(project_args)
         .output()
         .expect("failed to execute compiler process!");
