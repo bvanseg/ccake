@@ -1,4 +1,17 @@
+[discord-shield]: https://img.shields.io/discord/1031520677787865108
+
+[license]: https://img.shields.io/github/license/bvanseg/ccake
+[code-size]: https://img.shields.io/github/languages/code-size/bvanseg/ccake
+
+[rust-lang]: https://www.rust-lang.org/
+[rust-shield]: https://img.shields.io/badge/Made%20with-Rust-1f425f.svg
+
 # CCake
+
+![GitHub][license]
+[![rust-shield][]][rust-lang]
+![GitHub code size in bytes][code-size]
+![Discord][discord-shield]
 
 CCake is a command line tool written in Rust and designed to be a modern build tool + package manager for C/C++ projects.
 
