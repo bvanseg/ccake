@@ -7,7 +7,8 @@ static UNIX_INSTALL_SCRIPT: &str = include_str!("../../res/install.sh");
 static WINDOWS_INSTALL_SCRIPT: &str = include_str!("../../res/install.ps1");
 
 pub fn install(tool_library_name: Option<&String>) {
-    let mut dir = std::env::current_exe().expect("Failed to get executable directory file location!");
+    let mut dir =
+        std::env::current_exe().expect("Failed to get executable directory file location!");
     dir.pop();
 
     #[cfg(unix)]
@@ -21,7 +22,8 @@ pub fn install(tool_library_name: Option<&String>) {
         std::fs::write(&dir, UNIX_INSTALL_SCRIPT).expect("Failed to write to install script file!");
 
         #[cfg(windows)]
-        std::fs::write(&dir, WINDOWS_INSTALL_SCRIPT).expect("Failed to write to install script file!");
+        std::fs::write(&dir, WINDOWS_INSTALL_SCRIPT)
+            .expect("Failed to write to install script file!");
     }
 
     #[cfg(windows)]

@@ -1,6 +1,7 @@
+use crate::{config, settings, terminal::ansi::ANSI_ERROR_STYLE};
+use fansi::string::AnsiString;
 use std::{io::Write, path::Path};
 use walkdir::WalkDir;
-use crate::{terminal::ansi::{AnsiString, ANSI_ERROR_STYLE}, config, settings};
 
 pub fn build_project() {
     let config = config::read_config();
@@ -14,7 +15,7 @@ fn collect_c_file_paths(config: &config::Config, src_dir: &String) -> Vec<String
     let target_extension = match config.project_properties.language.to_lowercase().as_str() {
         "c" => ".c",
         "c++" | "cpp" => ".cpp",
-        _ => panic!("Unknown project language specified in ccake.toml!")
+        _ => panic!("Unknown project language specified in ccake.toml!"),
     };
 
     let walker = WalkDir::new(src_dir)
@@ -27,7 +28,7 @@ fn collect_c_file_paths(config: &config::Config, src_dir: &String) -> Vec<String
 
     for entry in walker {
         if entry.path().is_dir() {
-            continue
+            continue;
         }
 
         if let Some(path_str) = entry.path().to_str() {
@@ -44,36 +45,50 @@ fn run_compiler(config: &config::Config) {
 
     let out_file = match config.project_properties.project_type {
         config::ProjectType::Binary => "app.exe",
-        config::ProjectType::Library => "library.dll"
+        config::ProjectType::Library => "library.dll",
     };
 
-    let out_dir = &config.project_properties.out_dir.to_owned().unwrap_or_else(|| "out".to_string());
+    let out_dir = &config
+        .project_properties
+        .out_dir
+        .to_owned()
+        .unwrap_or_else(|| "out".to_string());
 
     // TODO: There has got to be a better/safer way of doing this...
-    let out_file_path = std::path::Path::new("")
-        .join(out_dir);
+    let out_file_path = std::path::Path::new("").join(out_dir);
 
-        std::fs::create_dir_all(&out_file_path).expect("Failed to create output directories for compiler output file!");
+    std::fs::create_dir_all(&out_file_path)
+        .expect("Failed to create output directories for compiler output file!");
 
     let out_file_path = out_file_path.join(out_file);
 
     let out_file_path_str = out_file_path.into_os_string().into_string().unwrap();
 
-
     let mut project_args: Vec<String> = match config.project_properties.project_type {
         config::ProjectType::Binary => vec!["-o", out_file_path_str.as_str()], // TODO: This shouldn't be .exe.
         // TODO: For library building, there should be a way to distinguish static and dynamic libraries.
-        config::ProjectType::Library => vec!["-shared", "-o", out_file_path_str.as_str()] // TODO: This shouldn't be .dll.
-    }.into_iter().map(String::from).collect();
-    
+        config::ProjectType::Library => vec!["-shared", "-o", out_file_path_str.as_str()], // TODO: This shouldn't be .dll.
+    }
+    .into_iter()
+    .map(String::from)
+    .collect();
+
     // Collect C source files for inputting into the compiler.
-    let src_dir = &config.project_properties.src_dir.to_owned().unwrap_or_else(|| "src".to_string());
+    let src_dir = &config
+        .project_properties
+        .src_dir
+        .to_owned()
+        .unwrap_or_else(|| "src".to_string());
     let c_files = &mut collect_c_file_paths(&config, src_dir);
     project_args.append(c_files);
 
     // Try to append compiler arguments from config's compiler_args property.
     if let Some(compiler_args) = &config.compiler_properties.compiler_args {
-        let mut split_args: Vec<String> = compiler_args.split_whitespace().into_iter().map(String::from).collect();
+        let mut split_args: Vec<String> = compiler_args
+            .split_whitespace()
+            .into_iter()
+            .map(String::from)
+            .collect();
         project_args.append(&mut split_args);
     }
 
@@ -97,12 +112,17 @@ fn run_compiler(config: &config::Config) {
         .expect("failed to execute compiler process!");
 
     // If there was standard output from the compiler, emit it.
-    let standard_output = &String::from_utf8(output.stdout).expect("Failed to convert output stdout to String!");
-    let ansi_standard_output = AnsiString::from_styles_vec(standard_output, vec![]);
-    std::io::stdout().write_all(&ansi_standard_output.as_string().as_bytes()).unwrap();
+    let standard_output =
+        &String::from_utf8(output.stdout).expect("Failed to convert output stdout to String!");
+    std::io::stdout()
+        .write_all(&standard_output.as_bytes())
+        .unwrap();
 
     // If there was erroroneous output from the compiler, emit it.
-    let error_output = &String::from_utf8(output.stderr).expect("Failed to convert output stderr to String!");
-    let ansi_err_output = AnsiString::from_styles_arr(error_output, &ANSI_ERROR_STYLE);
-    std::io::stderr().write_all(&ansi_err_output.as_string().as_bytes()).unwrap();
+    let error_output =
+        &String::from_utf8(output.stderr).expect("Failed to convert output stderr to String!");
+    let ansi_err_output = AnsiString::with_styles_arr(error_output, &ANSI_ERROR_STYLE);
+    std::io::stderr()
+        .write_all(&ansi_err_output.to_string().as_bytes())
+        .unwrap();
 }

@@ -25,6 +25,7 @@ version = "0.1.0"
 dependencies = [
  "clap",
  "dirs",
+ "fansi",
  "serde",
  "serde_derive",
  "toml",
@@ -92,6 +93,15 @@ checksum = "1b1d1d91c932ef41c0f2663aa8b0ca0342d444d842c06914aa0a7e352d0bada6"
 dependencies = [
  "libc",
  "redox_users",
+ "winapi",
+]
+
+[[package]]
+name = "fansi"
+version = "0.1.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "1f4b0b6e8ff28573f9055ade5113963e2343bb40f8644eeb7bf6f5b8732f65f7"
+dependencies = [
  "winapi",
 ]
 
