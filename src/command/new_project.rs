@@ -8,7 +8,7 @@ use crate::terminal::prompt::prompt;
 use crate::{config, HELLO_C, HELLO_CPP};
 
 pub fn initialize_project(sub_path: Option<&String>) {
-    let ansi_project_name = AnsiString::with_styles_arr("Version:", &ANSI_CHOICE_STYLE);
+    let ansi_project_name = AnsiString::with_styles_arr("Project Name:", &ANSI_CHOICE_STYLE);
     let ansi_project_version = AnsiString::with_styles_arr("Version:", &ANSI_CHOICE_STYLE);
     let ansi_project_authors = AnsiString::with_styles_arr("Authors:", &ANSI_CHOICE_STYLE);
 
