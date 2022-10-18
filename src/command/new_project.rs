@@ -1,5 +1,6 @@
 use clap::crate_version;
 
+use crate::settings::read_settings;
 use crate::{config, HELLO_C, HELLO_CPP};
 use crate::config::write_config;
 use crate::terminal::ansi::{self, AnsiString};
@@ -14,6 +15,8 @@ pub fn initialize_project(sub_path: Option<&String>) {
     let project_version = prompt(ansi_project_version);
     let project_authors = prompt(ansi_project_authors);
 
+    let settings = read_settings();
+
     let config = config::Config {
         project_properties: config::ProjectProperties {
             project_name: project_name.trim().to_string(),
@@ -27,7 +30,7 @@ pub fn initialize_project(sub_path: Option<&String>) {
             out_dir: None
         },
         compiler_properties: config::CompilerProperties {
-            compiler_dir: "/path/to/compiler".to_string(),
+            compiler_dir: settings.default_compiler_dir,
             compiler_args: None
         }
     };
