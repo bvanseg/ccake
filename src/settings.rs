@@ -2,7 +2,7 @@ use dirs;
 use serde_derive::{Deserialize, Serialize};
 use std::{fs::File, io::Read};
 
-use crate::terminal::{ansi::{warning}};
+use crate::terminal::ansi::warning;
 
 #[derive(Debug, Deserialize, Serialize)]
 pub struct Settings {
@@ -20,16 +20,18 @@ pub fn read_settings() -> Settings {
     home_dir.push(CCAKE_SETTINGS_FILE_NAME);
 
     let default_settings = Settings {
-        default_compiler_dir: "/path/to/compiler".to_string()
+        default_compiler_dir: "/path/to/compiler".to_string(),
     };
 
-    let default_settings_str = toml::to_string(&default_settings).expect("Failed to serialize default .ccake settings!");
+    let default_settings_str =
+        toml::to_string(&default_settings).expect("Failed to serialize default .ccake settings!");
 
     // If the .ccake settings file does not exist, create it and write the default data into it.
     // Otherwise, try to open the file and read into it.
     if !home_dir.exists() {
         // TODO: Make this constant somehow.
-        std::fs::write(home_dir, default_settings_str).expect("Failed to write to settings.toml file!");
+        std::fs::write(home_dir, default_settings_str)
+            .expect("Failed to write to settings.toml file!");
         return default_settings;
     } else {
         match File::open(home_dir) {
@@ -43,7 +45,7 @@ pub fn read_settings() -> Settings {
                 }
 
                 return toml::from_str(&file_content).unwrap_or(default_settings);
-            },
+            }
             Err(_) => {
                 warning("Failed to open settings.toml file for reading, falling back on default settings.");
                 return default_settings;

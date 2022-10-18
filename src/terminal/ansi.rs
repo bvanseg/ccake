@@ -1,4 +1,4 @@
-use fansi::{color::AnsiColor, style::AnsiStyle, string::AnsiString};
+use fansi::{color::AnsiColor, string::AnsiString, style::AnsiStyle};
 
 pub const ANSI_CHOICE_STYLE: [AnsiStyle; 3] = [
     AnsiStyle::Bold,
@@ -7,8 +7,10 @@ pub const ANSI_CHOICE_STYLE: [AnsiStyle; 3] = [
 ];
 pub const ANSI_ERROR_STYLE: [AnsiStyle; 2] =
     [AnsiStyle::Bold, AnsiStyle::ForegroundColor(AnsiColor::Red)];
-pub const ANSI_WARNING_STYLE: [AnsiStyle; 2] =
-    [AnsiStyle::Bold, AnsiStyle::ForegroundColor(AnsiColor::Yellow)];
+pub const ANSI_WARNING_STYLE: [AnsiStyle; 2] = [
+    AnsiStyle::Bold,
+    AnsiStyle::ForegroundColor(AnsiColor::Yellow),
+];
 
 pub fn warning(text: &str) {
     println!("{}", warning_text(text));

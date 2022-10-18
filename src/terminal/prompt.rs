@@ -10,7 +10,10 @@ use crate::terminal::ansi::ANSI_CHOICE_STYLE;
  */
 pub fn prompt(prompt: &str) -> String {
     // Prompt for a project name and flush to stdout.
-    print!("{} ", AnsiString::with_styles_arr(prompt, &ANSI_CHOICE_STYLE));
+    print!(
+        "{} ",
+        AnsiString::with_styles_arr(prompt, &ANSI_CHOICE_STYLE)
+    );
     io::stdout()
         .flush()
         .expect("Failed to flush standard output buffer!");
