@@ -1,6 +1,6 @@
 # CCake
 
-CCake is a command line tool written in Rust and designed to be a modern build tool for C/C++ projects.
+CCake is a command line tool written in Rust and designed to be a modern build tool + package manager for C/C++ projects.
 
 ## Goals
 
@@ -23,7 +23,7 @@ CCake is a command line tool written in Rust and designed to be a modern build t
 
 These are far-future goals that are not goals at the moment, but are slated to become goals after CCake has satisified its original goals in a release environment.
 
-- An install system for compilers. Expected behavior would be to download compilers via `ccake install clang`, which would install the `clang` compiler to a `.ccake` folder on the user's system.
+- ~~An install system for compilers. Expected behavior would be to download compilers via `ccake install clang`, which would install the `clang` compiler to a `.ccake` folder on the user's system.~~ Implemented.
 - An install system for third-party libraries in a manner similar to that of Java's or Node's library ecosystems. Expected behavior would be to download some library like GLFW using a command `ccake install glfw` without need to manually link/touch the library's downloaded files.
 - Introducing a `[dependencies]` section within `ccake.toml` that would support a command such as `ccake install` to download all necessary library files, such that third parties do not have their files distributed through parties other than the maintainer/owner of said files.
 
