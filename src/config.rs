@@ -24,7 +24,7 @@ pub struct ProjectProperties {
 
 #[derive(Debug, Deserialize, Serialize)]
 pub struct CompilerProperties {
-    pub compiler_dir: String,
+    pub c_compiler_dir: String,
     pub compiler_args: Option<String>,
 }
 

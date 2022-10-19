@@ -92,7 +92,7 @@ fn run_compiler(config: &config::Config) {
         project_args.append(&mut split_args);
     }
 
-    let mut working_compiler_dir = config.compiler_properties.compiler_dir.clone();
+    let mut working_compiler_dir = config.compiler_properties.c_compiler_dir.clone();
 
     // If the project compiler path does not exist, try checking the default compiler path.
     if !Path::new(&working_compiler_dir).exists() {

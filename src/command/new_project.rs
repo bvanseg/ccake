@@ -29,7 +29,7 @@ pub fn initialize_project(sub_path: Option<&String>) {
             out_dir: None,
         },
         compiler_properties: config::CompilerProperties {
-            compiler_dir: settings.default_compiler_dir,
+            c_compiler_dir: settings.default_compiler_dir,
             compiler_args: None,
         },
     };
