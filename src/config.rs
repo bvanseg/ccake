@@ -14,7 +14,7 @@ pub struct ProjectProperties {
     pub ccake_version: String,
     pub project_name: String,
     pub project_version: String,
-    pub authors: Vec<String>,
+    pub authors: Option<Vec<String>>,
 
     pub language: String,
     pub project_type: ProjectType,

@@ -16,11 +16,11 @@ pub fn initialize_project(sub_path: Option<&String>) {
         project_properties: config::ProjectProperties {
             project_name: project_name.trim().to_string(),
             project_version: project_version.trim().to_string(),
-            authors: project_authors
+            authors: Some(project_authors
                 .trim()
                 .split(',')
                 .map(|f| f.trim().to_string())
-                .collect(),
+                .collect()),
             ccake_version: crate_version!().to_string(),
 
             language: "C++".to_string(),
