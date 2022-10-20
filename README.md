@@ -23,9 +23,11 @@ CCake is a command line tool written in Rust and designed to be a modern build t
 - To keep CCake expressive in such a way that it feels familiar with other build and packaging tools such as `npm`, `yarn`, `gradle` and `cargo`.
 - To make CCake cross-platform.
 - To streamline the file structure for C/C++ projects into a more modern design pattern becoming increasingly and commonly used throughout the industry.
-- To prioritize good project design patterns and habits over backwards-compatibility (as the default).
+- To prioritize good project design patterns and habits over CCake's own backwards-compatibility (as the default).*
 - To supplement modern compiler systems by making compiler input arguments more accessible to users (such as passing /src files into the compiler instead of the user manually doing so).
-- To support backwards compatibility for compiler tools where necessary and possible.
+- To support backwards compatibility for compilers where necessary and possible.*
+
+**Clarification: CCake as a tool does not seek to be backwards compatible in regards to running CCake's commands. However, maintaining backwards compatibility for compilers (such as GCC or Clang) is a goal that is in mind.*
 
 ## Non-Goals
 
