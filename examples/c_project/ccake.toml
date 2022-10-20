@@ -1,0 +1,11 @@
+[project_properties]
+ccake_version = "0.1.0"
+project_name = "Example C Project"
+project_version = "0.1.0"
+
+authors = ["Boston Vanseghi"]
+language = "C"
+project_type = "Binary"
+
+[compiler_properties]
+compiler_dir = "C:\\Users\\bvans\\.ccake\\cache\\mingw64\\bin\\gcc.exe"
