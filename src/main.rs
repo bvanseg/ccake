@@ -3,7 +3,7 @@ use crate::command::configure::configure;
 use crate::command::install::install;
 use crate::command::new_project::initialize_project;
 
-use clap::{crate_authors, crate_description, crate_name, crate_version, Arg, Command};
+use clap::{crate_authors, crate_description, crate_name, crate_version, Arg, Command, ArgAction};
 use fansi::windows::enable_ansi_support;
 
 mod command;
@@ -33,7 +33,14 @@ fn main() {
         )
         .subcommand(
             Command::new("build")
-                .about("Builds the existing C/C++ project within the current directory."),
+                .about("Builds the existing C/C++ project within the current directory.")
+                .arg(
+                    Arg::new("static-library")
+                        .help("Specifies that a static library should be built from the current project.")
+                        .short('s')
+                        .long("static")
+                        .action(ArgAction::SetTrue),
+                )
         )
         .subcommand(
             Command::new("install")
@@ -66,7 +73,7 @@ fn main() {
     match matches.subcommand() {
         Some(("new", arg_matches)) => initialize_project(arg_matches.get_one::<String>("folder")),
         Some(("init", _)) => initialize_project(None),
-        Some(("build", _)) => build_project(),
+        Some(("build", arg_matches)) => build_project(arg_matches),
         Some(("install", arg_matches)) => {
             install(arg_matches.get_one::<String>("tool-library-name"))
         }

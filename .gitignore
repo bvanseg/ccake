@@ -2,3 +2,4 @@
 /ccake.toml
 *.exe
 *.dll
+*.lib

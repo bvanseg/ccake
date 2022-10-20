@@ -1,15 +1,29 @@
 use crate::{config, settings, terminal::ansi::ANSI_ERROR_STYLE};
+use clap::ArgMatches;
 use fansi::{string::AnsiString, style::AnsiStyle};
 use std::{io::Write, path::Path};
 use walkdir::WalkDir;
 
-pub fn build_project() {
+pub fn build_project(arg_matches: &ArgMatches) {
     let config = config::read_config();
 
     let out_file = match config.project_properties.project_type {
         config::ProjectType::Binary => if cfg!(windows) { "app.exe" } else { "app.AppImage" },
-        // TODO: Handle static library case.
-        config::ProjectType::Library => if cfg!(windows) { "library.dll" } else { "library.so" },
+        config::ProjectType::Library => {
+            if arg_matches.get_flag("static-library") {
+                if cfg!(windows) {
+                    "library.lib" 
+                } else {
+                    "library.a" 
+                }
+            } else {
+                if cfg!(windows) {
+                    "library.dll" 
+                } else {
+                    "library.so" 
+                }
+            }
+        },
     };
 
     let out_dir = &config
