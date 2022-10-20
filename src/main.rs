@@ -48,10 +48,14 @@ fn main() {
             Command::new("configure")
                 .about("Configure CCake's global properties.")
                 .arg(
-                    Arg::new("default-compiler-dir")
-                        .help("The path to the default compiler to be used for building projects.")
-                        .short('c')
-                        .long("compiler-dir"),
+                    Arg::new("default-c-compiler-dir")
+                        .help("The path to the default C compiler to be used for building projects.")
+                        .long("c-compiler-dir"),
+                )
+                .arg(
+                    Arg::new("default-cpp-compiler-dir")
+                        .help("The path to the default C++ compiler to be used for building projects.")
+                        .long("cpp-compiler-dir"),
                 ),
         );
 

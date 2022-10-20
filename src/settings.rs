@@ -6,7 +6,8 @@ use crate::terminal::ansi::warning;
 
 #[derive(Debug, Deserialize, Serialize)]
 pub struct Settings {
-    pub default_compiler_dir: String,
+    pub default_c_compiler_dir: String,
+    pub default_cpp_compiler_dir: String,
 }
 static CCAKE_SETTINGS_FILE_NAME: &str = "settings.toml";
 
@@ -20,7 +21,8 @@ pub fn read_settings() -> Settings {
     home_dir.push(CCAKE_SETTINGS_FILE_NAME);
 
     let default_settings = Settings {
-        default_compiler_dir: "/path/to/compiler".to_string(),
+        default_c_compiler_dir: "/path/to/c-compiler".to_string(),
+        default_cpp_compiler_dir: "/path/to/cpp-compiler".to_string(),
     };
 
     let default_settings_str =
