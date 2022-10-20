@@ -44,9 +44,21 @@ These are far-future goals that are not goals at the moment, but are slated to b
 ## Build
 
 - Install cargo for Rust.
-- Clone the project and run `cargo build` in the root directory.
+- Clone the project and cd into the project directory.
+- Run `cargo build` in the root directory of the project.
 
 ## Usage
 
 - Use `cargo run -- <ccake args>` to test ccake. Example: `cargo run -- --version`
-- To build the local C project, you will need to first run `cargo run -- init` to initialize the root directory as a ccake project. Afterwards, open the newly generated `ccake.toml` and edit the `compiler_dir` property to point to your preferred C/C++ Compiler's executable.
+
+### Examples on Windows
+
+- Run `cargo build` and then add the generated executable to your environment variables path. This will allow you to invoke the `ccake` command in the terminal.
+- Run `ccake install mingw` to install a portable GCC compiler toolchain. This command will also set CCake's default C/C++ compiler paths to GCC/G++ respectively.
+- `cd` into any of the projects found in the `examples` folder.
+- Run `ccake build`. This should output an executable for the binary projects into an `out` folder.
+- Run the executable.
+
+### Examples on Linux
+
+- Linux is not yet supported by CCake. PRs are welcome to add Linux support.
