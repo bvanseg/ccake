@@ -1,7 +1,6 @@
 use clap::crate_version;
 
 use crate::config::write_config;
-use crate::settings::read_settings;
 use crate::terminal::prompt::prompt;
 use crate::{config, HELLO_C, HELLO_CPP};
 
@@ -9,8 +8,6 @@ pub fn initialize_project(sub_path: Option<&String>) {
     let project_name = prompt("Project Name:");
     let project_version = prompt("Version:");
     let project_authors = prompt("Authors:");
-
-    let settings = read_settings();
 
     let config = config::Config {
         project_properties: config::ProjectProperties {
@@ -29,7 +26,7 @@ pub fn initialize_project(sub_path: Option<&String>) {
             out_dir: None,
         },
         compiler_properties: config::CompilerProperties {
-            c_compiler_dir: settings.default_compiler_dir,
+            compiler_dir: None,
             compiler_args: None,
         },
     };
