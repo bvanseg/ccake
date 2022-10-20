@@ -27,10 +27,7 @@ pub fn initialize_project(sub_path: Option<&String>) {
             src_dir: None,
             out_dir: None,
         },
-        compiler_properties: Some(config::CompilerProperties {
-            compiler_dir: None,
-            compiler_args: None,
-        }),
+        compiler_properties: None,
     };
 
     write_project_files(&config, sub_path);
