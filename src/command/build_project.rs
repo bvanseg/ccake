@@ -6,11 +6,10 @@ use walkdir::WalkDir;
 pub fn build_project() {
     let config = config::read_config();
 
-    // TODO: Determine file extension based on platform + project type (binary/library(static/dynamic)).
-    // TODO: These file names should be based on the ccake.toml properties.
     let out_file = match config.project_properties.project_type {
-        config::ProjectType::Binary => "app.exe",
-        config::ProjectType::Library => "library.dll",
+        config::ProjectType::Binary => if cfg!(windows) { "app.exe" } else { "app.AppImage" },
+        // TODO: Handle static library case.
+        config::ProjectType::Library => if cfg!(windows) { "library.dll" } else { "library.so" },
     };
 
     let out_dir = &config
