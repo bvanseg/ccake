@@ -8,7 +8,7 @@ use crate::terminal::ansi::ANSI_CHOICE_STYLE;
 /**
  * Prompts a user for input, and returns the user's input back as a [String] type.
  */
-pub fn prompt(prompt: &str) -> String {
+pub fn prompt(prompt: &str) -> Option<String> {
     // Prompt for a project name and flush to stdout.
     print!(
         "{} ",
@@ -24,5 +24,11 @@ pub fn prompt(prompt: &str) -> String {
         .read_line(buffer)
         .expect("Unable to read input.");
 
-    return buffer.to_string();
+    let buffer = buffer.trim().to_string();
+
+    if buffer.is_empty() {
+        return None;
+    }
+
+    return Some(buffer);
 }
