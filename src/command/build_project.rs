@@ -1,4 +1,4 @@
-use crate::{config, settings, terminal::ansi::{ANSI_ERROR_STYLE}};
+use crate::{config, settings, terminal::ansi::ANSI_ERROR_STYLE};
 use fansi::{string::AnsiString, style::AnsiStyle};
 use std::{io::Write, path::Path};
 use walkdir::WalkDir;
@@ -69,7 +69,6 @@ fn collect_cxx_file_paths(config: &config::Config, src_dir: &String) -> Vec<Stri
 }
 
 fn compute_compiler_args(config: &config::Config, out_file_path_str: String) -> Vec<String> {
-
     let mut project_args: Vec<String> = match config.project_properties.project_type {
         config::ProjectType::Binary => vec!["-o", out_file_path_str.as_str()],
         // TODO: For library building, there should be a way to distinguish static and dynamic libraries.
@@ -107,10 +106,12 @@ fn compute_working_compiler_dir(config: &config::Config) -> Option<String> {
 
     match &working_compiler_dir {
         // If the project compiler path does not exist, try checking the default compiler path.
-        Some(project_compiler_dir) => if !Path::new(project_compiler_dir).exists() {
-            read_default_compiler_dir(config, &mut working_compiler_dir);
+        Some(project_compiler_dir) => {
+            if !Path::new(project_compiler_dir).exists() {
+                read_default_compiler_dir(config, &mut working_compiler_dir);
+            }
         }
-        None => read_default_compiler_dir(config, &mut working_compiler_dir)
+        None => read_default_compiler_dir(config, &mut working_compiler_dir),
     }
 
     return working_compiler_dir;
@@ -118,11 +119,12 @@ fn compute_working_compiler_dir(config: &config::Config) -> Option<String> {
 
 fn read_default_compiler_dir(config: &config::Config, working_compiler_dir: &mut Option<String>) {
     let settings = settings::read_settings();
-    let default_ccake_compiler_dir = match config.project_properties.language.to_lowercase().as_str() {
-        "c" => settings.default_c_compiler_dir,
-        "c++" | "cpp" => settings.default_cpp_compiler_dir,
-        _ => panic!("Unknown project language specified in ccake.toml!"),
-    };
+    let default_ccake_compiler_dir =
+        match config.project_properties.language.to_lowercase().as_str() {
+            "c" => settings.default_c_compiler_dir,
+            "c++" | "cpp" => settings.default_cpp_compiler_dir,
+            _ => panic!("Unknown project language specified in ccake.toml!"),
+        };
     if !Path::new(&default_ccake_compiler_dir).exists() {
         panic!("Failed to get a working compiler path for building!");
     } else {

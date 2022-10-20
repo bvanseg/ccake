@@ -20,7 +20,7 @@ pub fn initialize_project(sub_path: Option<&String>) {
             "cpp" => break "C++".to_string(),
             _ => {
                 error("Value must be either 'C' or 'C++', please try again: ");
-                continue
+                continue;
             }
         }
     };
@@ -31,11 +31,13 @@ pub fn initialize_project(sub_path: Option<&String>) {
         project_properties: config::ProjectProperties {
             project_name,
             project_version,
-            authors: Some(project_authors
-                .trim()
-                .split(',')
-                .map(|f| f.trim().to_string())
-                .collect()),
+            authors: Some(
+                project_authors
+                    .trim()
+                    .split(',')
+                    .map(|f| f.trim().to_string())
+                    .collect(),
+            ),
             ccake_version: crate_version!().to_string(),
 
             language: project_language,
