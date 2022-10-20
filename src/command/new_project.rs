@@ -6,7 +6,8 @@ use crate::terminal::prompt::prompt;
 use crate::{config, HELLO_C, HELLO_CPP};
 
 pub fn initialize_project(sub_path: Option<&String>) {
-    let (project_name, project_language, project_version, project_authors) = prompt_user_for_project_details();
+    let (project_name, project_language, project_version, project_authors) =
+        prompt_user_for_project_details();
 
     let config = config::Config {
         project_properties: config::ProjectProperties {
@@ -57,7 +58,12 @@ fn prompt_user_for_project_details() -> (String, String, String, String) {
     let project_version = prompt("Version:").unwrap_or("1.0.0".to_string());
     let project_authors = prompt("Authors:").unwrap_or("[Author Name] <[email]>".to_string());
 
-    return (project_name, project_language, project_version, project_authors);
+    return (
+        project_name,
+        project_language,
+        project_version,
+        project_authors,
+    );
 }
 
 fn write_project_files(config: &config::Config, sub_path: Option<&String>) {
