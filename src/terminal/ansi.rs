@@ -16,7 +16,19 @@ pub fn warning(text: &str) {
     println!("{}", warning_text(text));
 }
 
+pub fn error(text: &str) {
+    println!("{}", error_text(text));
+}
+
 pub fn warning_text(text: &str) -> String {
-    let warning_label = AnsiString::with_styles_arr("warning:", &ANSI_WARNING_STYLE);
-    return format!("{} {}", warning_label, text);
+    return label_text("warning:", text, &ANSI_WARNING_STYLE);
+}
+
+pub fn error_text(text: &str) -> String {
+    return label_text("error:", text, &ANSI_ERROR_STYLE);
+}
+
+pub fn label_text(label: &str, text: &str, style: &[AnsiStyle]) -> String {
+    let label = AnsiString::with_styles_arr(label, style);
+    return format!("{} {}", label, text);
 }
