@@ -31,7 +31,7 @@ pub struct CompilerProperties {
 #[derive(Debug, Deserialize, Serialize)]
 pub struct Config {
     pub project_properties: ProjectProperties,
-    pub compiler_properties: CompilerProperties,
+    pub compiler_properties: Option<CompilerProperties>,
 }
 
 pub fn read_config() -> Config {

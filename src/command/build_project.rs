@@ -88,7 +88,7 @@ fn compute_compiler_args(config: &config::Config, out_file_path_str: String) -> 
     project_args.append(c_files);
 
     // Try to append compiler arguments from config's compiler_args property.
-    if let Some(compiler_args) = &config.compiler_properties.compiler_args {
+    if let Some(compiler_args) = config.compiler_properties.as_ref().map(|f| f.compiler_args.as_ref()).flatten() {
         let mut split_args: Vec<String> = compiler_args
             .split_whitespace()
             .into_iter()
@@ -102,7 +102,7 @@ fn compute_compiler_args(config: &config::Config, out_file_path_str: String) -> 
 
 fn compute_working_compiler_dir(config: &config::Config) -> Option<String> {
     // First try to use the project compiler directory.
-    let mut working_compiler_dir = config.compiler_properties.compiler_dir.clone();
+    let mut working_compiler_dir = config.compiler_properties.as_ref().map(|f| f.compiler_dir.to_owned()).flatten().clone();
 
     match &working_compiler_dir {
         // If the project compiler path does not exist, try checking the default compiler path.
