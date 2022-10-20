@@ -8,22 +8,28 @@ pub fn build_project(arg_matches: &ArgMatches) {
     let config = config::read_config();
 
     let out_file = match config.project_properties.project_type {
-        config::ProjectType::Binary => if cfg!(windows) { "app.exe" } else { "app.AppImage" },
+        config::ProjectType::Binary => {
+            if cfg!(windows) {
+                "app.exe"
+            } else {
+                "app.AppImage"
+            }
+        }
         config::ProjectType::Library => {
             if arg_matches.get_flag("static-library") {
                 if cfg!(windows) {
-                    "library.lib" 
+                    "library.lib"
                 } else {
-                    "library.a" 
+                    "library.a"
                 }
             } else {
                 if cfg!(windows) {
-                    "library.dll" 
+                    "library.dll"
                 } else {
-                    "library.so" 
+                    "library.so"
                 }
             }
-        },
+        }
     };
 
     let out_dir = &config
