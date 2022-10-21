@@ -4,6 +4,8 @@ use crate::command::install::install;
 use crate::command::new_project::initialize_project;
 
 use clap::{crate_authors, crate_description, crate_name, crate_version, Arg, ArgAction, Command};
+
+#[cfg(windows)]
 use fansi::windows::enable_ansi_support;
 
 mod command;
@@ -68,6 +70,7 @@ fn main() {
 
     let matches = command.get_matches();
 
+    #[cfg(windows)]
     enable_ansi_support().expect("Failed to enable ansi support for Windows!"); // TODO: Remove this line.
 
     match matches.subcommand() {

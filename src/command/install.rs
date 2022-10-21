@@ -25,6 +25,13 @@ pub fn install(tool_library_name: Option<&String>) {
         std::fs::write(&dir, WINDOWS_INSTALL_SCRIPT)
             .expect("Failed to write to install script file!");
     }
+    
+    #[cfg(unix)]
+    let output = std::process::Command::new("sh")
+        .arg(dir)
+        .arg(tool_library_name.unwrap())
+        .output()
+        .expect("Failed to install tool/library!");
 
     #[cfg(windows)]
     let output = std::process::Command::new("powershell")
