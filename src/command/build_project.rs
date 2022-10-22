@@ -22,12 +22,10 @@ pub fn build_project(arg_matches: &ArgMatches) {
                 } else {
                     "library.a"
                 }
+            } else if cfg!(windows) {
+                "library.dll"
             } else {
-                if cfg!(windows) {
-                    "library.dll"
-                } else {
-                    "library.so"
-                }
+                "library.so"
             }
         }
     };
