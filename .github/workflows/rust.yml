@@ -1,4 +1,4 @@
-name: Rust
+name: Rust CI
 
 on:
   push:
@@ -10,22 +10,39 @@ env:
   CARGO_TERM_COLOR: always
 
 jobs:
-  build:
-
+  ci:
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        rust:
+          - stable
 
     steps:
-    - uses: actions/checkout@v3
-    # Build
-    - name: Build
-      run: cargo build --verbose
-    # Clippy
-    - run: rustup component add clippy
-      if: matrix.rust == 'beta' || matrix.rust == 'stable'
-    - working-directory: ${{ matrix.conf.name }}
-      name: clippy ${{ matrix.conf.name }}
-      run: cargo clippy --all-targets -- -D warnings
-      if: matrix.rust == 'beta' || matrix.rust == 'stable'
-    # Tests
-    - name: Run tests
-      run: cargo test --verbose
+      # Checkout
+      - uses: actions/checkout@v3
+      # Toolchain
+      - uses: actions-rs/toolchain@v1
+        with:
+          profile: minimal
+          toolchain: ${{ matrix.rust }}
+          override: true
+          components: rustfmt, clippy
+      # Build
+      - uses: actions-rs/cargo@v1
+        with:
+          command: build
+          args: --verbose
+      # Test
+      - uses: actions-rs/cargo@v1
+        with:
+          command: test
+      # Format
+      - uses: actions-rs/cargo@v1
+        with:
+          command: fmt
+          args: --all -- --check
+      # Clippy
+      - uses: actions-rs/cargo@v1
+        with:
+          command: clippy
+          args: -- -D warnings
