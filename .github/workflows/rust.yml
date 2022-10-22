@@ -16,7 +16,16 @@ jobs:
 
     steps:
     - uses: actions/checkout@v3
+    # Build
     - name: Build
       run: cargo build --verbose
+    # Clippy
+    - run: rustup component add clippy
+      if: matrix.rust == 'beta' || matrix.rust == 'stable'
+    - working-directory: ${{ matrix.conf.name }}
+      name: clippy ${{ matrix.conf.name }}
+      run: cargo clippy --all-targets -- -D warnings
+      if: matrix.rust == 'beta' || matrix.rust == 'stable'
+    # Tests
     - name: Run tests
       run: cargo test --verbose
