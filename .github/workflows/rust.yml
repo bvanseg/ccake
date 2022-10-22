@@ -19,30 +19,36 @@ jobs:
 
     steps:
       # Checkout
-      - uses: actions/checkout@v3
+      - name: Checkout
+        uses: actions/checkout@v3
       # Toolchain
-      - uses: actions-rs/toolchain@v1
+      - name: Toolchain
+        uses: actions-rs/toolchain@v1
         with:
           profile: minimal
           toolchain: ${{ matrix.rust }}
           override: true
           components: rustfmt, clippy
       # Build
-      - uses: actions-rs/cargo@v1
+      - name: Build
+        uses: actions-rs/cargo@v1
         with:
           command: build
           args: --verbose
-      # Test
-      - uses: actions-rs/cargo@v1
+      # Tests
+      - name: Tests
+        uses: actions-rs/cargo@v1
         with:
           command: test
-      # Format
-      - uses: actions-rs/cargo@v1
+      # Formatting
+      - name: Formatting
+        uses: actions-rs/cargo@v1
         with:
           command: fmt
           args: --all -- --check
       # Clippy
-      - uses: actions-rs/cargo@v1
+      - name: Clippy
+        uses: actions-rs/cargo@v1
         with:
           command: clippy
           args: -- -D warnings
