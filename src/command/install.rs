@@ -20,7 +20,7 @@ pub fn install(tool_library_name: Option<&String>) {
     if !dir.exists() {
         std::fs::write(&dir, INSTALL_SCRIPT).expect("Failed to write to install script file!");
     }
-    
+
     #[cfg(unix)]
     let output = std::process::Command::new("sh")
         .arg(dir)

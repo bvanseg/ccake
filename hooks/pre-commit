@@ -1,0 +1,21 @@
+#!/bin/sh
+
+if ! cargo fmt -- --check
+then
+    echo "There are some code style issues. Please run cargo fmt before committing!"
+    exit 1
+fi
+
+if ! cargo clippy --all-targets -- -D warnings
+then
+    echo "There are some clippy issues. Please correct them before committing!"
+    exit 1
+fi
+
+if ! cargo test
+then
+    echo "Issues found while running tests. Please correct them before committing!"
+    exit 1
+fi
+
+exit 0
