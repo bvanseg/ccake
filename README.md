@@ -1,6 +1,9 @@
 [discord-shield]: https://img.shields.io/discord/1031520677787865108
 [discord-invite]: https://discord.com/invite/xyaKBzarJs
 
+[actions-shield]: https://github.com/bvanseg/ccake/actions/workflows/rust.yml/badge.svg
+[actions-yml]: https://github.com/bvanseg/ccake/actions/workflows/rust.yml
+
 [license]: https://img.shields.io/github/license/bvanseg/ccake
 [code-size]: https://img.shields.io/github/languages/code-size/bvanseg/ccake
 
@@ -11,6 +14,7 @@
 
 ![GitHub][license]
 [![rust-shield][]][rust-lang]
+[![Rust][actions-shield]][actions-yml]
 ![GitHub code size in bytes][code-size]
 [![discord-shield][]][discord-invite]
 
