@@ -42,8 +42,7 @@ pub fn read_config() -> Config {
     file.read_to_string(&mut file_content)
         .expect("Failed to read contents of ccake.toml file!");
 
-    return toml::from_str(&file_content)
-        .expect("Failed to deserialize content from ccake.toml file!");
+    toml::from_str(&file_content).expect("Failed to deserialize content from ccake.toml file!")
 }
 
 pub fn write_config(config: &Config, sub_path: &Option<&String>) {

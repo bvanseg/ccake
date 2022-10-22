@@ -30,5 +30,5 @@ pub fn prompt(prompt: &str) -> Option<String> {
         return None;
     }
 
-    return Some(buffer);
+    Some(buffer)
 }

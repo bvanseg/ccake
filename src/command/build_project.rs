@@ -58,7 +58,7 @@ pub fn build_project(arg_matches: &ArgMatches) {
 }
 
 fn collect_cxx_file_paths(config: &config::Config, src_dir: &String) -> Vec<String> {
-    let mut vec: Vec<String> = Vec::new();
+    let mut paths: Vec<String> = Vec::new();
 
     let target_extension = match config.project_properties.language.to_lowercase().as_str() {
         "c" => ".c",
@@ -70,7 +70,7 @@ fn collect_cxx_file_paths(config: &config::Config, src_dir: &String) -> Vec<Stri
         .into_iter()
         .filter_entry(|p| {
             let path_str = p.file_name().to_string_lossy();
-            path_str.starts_with(src_dir) || path_str.ends_with(target_extension) == true
+            path_str.starts_with(src_dir) || path_str.ends_with(target_extension)
         })
         .filter_map(|r| r.ok());
 
@@ -80,18 +80,18 @@ fn collect_cxx_file_paths(config: &config::Config, src_dir: &String) -> Vec<Stri
         }
 
         if let Some(path_str) = entry.path().to_str() {
-            vec.push(path_str.to_string());
+            paths.push(path_str.to_string());
         }
     }
 
-    return vec;
+    paths
 }
 
-fn compute_compiler_args(config: &config::Config, out_file_path_str: String) -> Vec<String> {
+fn compute_compiler_args(config: &config::Config, out_file_path: String) -> Vec<String> {
     let mut project_args: Vec<String> = match config.project_properties.project_type {
-        config::ProjectType::Binary => vec!["-o", out_file_path_str.as_str()],
+        config::ProjectType::Binary => vec!["-o", out_file_path.as_str()],
         // TODO: For library building, there should be a way to distinguish static and dynamic libraries.
-        config::ProjectType::Library => vec!["-shared", "-o", out_file_path_str.as_str()],
+        config::ProjectType::Library => vec!["-shared", "-o", out_file_path.as_str()],
     }
     .into_iter()
     .map(String::from)
@@ -103,15 +103,14 @@ fn compute_compiler_args(config: &config::Config, out_file_path_str: String) -> 
         .src_dir
         .to_owned()
         .unwrap_or_else(|| "src".to_string());
-    let c_files = &mut collect_cxx_file_paths(&config, src_dir);
+    let c_files = &mut collect_cxx_file_paths(config, src_dir);
     project_args.append(c_files);
 
     // Try to append compiler arguments from config's compiler_args property.
     if let Some(compiler_args) = config
         .compiler_properties
         .as_ref()
-        .map(|f| f.compiler_args.as_ref())
-        .flatten()
+        .and_then(|f| f.compiler_args.as_ref())
     {
         let mut split_args: Vec<String> = compiler_args
             .split_whitespace()
@@ -121,7 +120,7 @@ fn compute_compiler_args(config: &config::Config, out_file_path_str: String) -> 
         project_args.append(&mut split_args);
     }
 
-    return project_args;
+    project_args
 }
 
 fn compute_working_compiler_dir(config: &config::Config) -> Option<String> {
@@ -129,9 +128,7 @@ fn compute_working_compiler_dir(config: &config::Config) -> Option<String> {
     let mut working_compiler_dir = config
         .compiler_properties
         .as_ref()
-        .map(|f| f.compiler_dir.to_owned())
-        .flatten()
-        .clone();
+        .and_then(|f| f.compiler_dir.to_owned());
 
     match &working_compiler_dir {
         // If the project compiler path does not exist, try checking the default compiler path.
@@ -143,7 +140,7 @@ fn compute_working_compiler_dir(config: &config::Config) -> Option<String> {
         None => read_default_compiler_dir(config, &mut working_compiler_dir),
     }
 
-    return working_compiler_dir;
+    working_compiler_dir
 }
 
 fn read_default_compiler_dir(config: &config::Config, working_compiler_dir: &mut Option<String>) {
@@ -171,12 +168,12 @@ fn execute_compiler(working_compiler_dir: Option<String>, project_args: Vec<Stri
     handle_compiler_stdout(&output.stderr, &ANSI_ERROR_STYLE);
 }
 
-fn handle_compiler_stdout(output: &Vec<u8>, style: &[AnsiStyle]) {
+fn handle_compiler_stdout(output: &[u8], style: &[AnsiStyle]) {
     // If there was standard output from the compiler, emit it.
     let output_str =
         &String::from_utf8(output.to_vec()).expect("Failed to convert output stdout to String!");
     let ansi_err_output = AnsiString::with_styles_arr(output_str, style);
     std::io::stderr()
-        .write_all(&ansi_err_output.to_string().as_bytes())
+        .write_all(ansi_err_output.to_string().as_bytes())
         .unwrap();
 }

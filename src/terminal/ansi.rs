@@ -21,14 +21,14 @@ pub fn error(text: &str) {
 }
 
 pub fn warning_text(text: &str) -> String {
-    return label_text("warning:", text, &ANSI_WARNING_STYLE);
+    label_text("warning:", text, &ANSI_WARNING_STYLE)
 }
 
 pub fn error_text(text: &str) -> String {
-    return label_text("error:", text, &ANSI_ERROR_STYLE);
+    label_text("error:", text, &ANSI_ERROR_STYLE)
 }
 
 pub fn label_text(label: &str, text: &str, style: &[AnsiStyle]) -> String {
     let label = AnsiString::with_styles_arr(label, style);
-    return format!("{} {}", label, text);
+    format!("{} {}", label, text)
 }
