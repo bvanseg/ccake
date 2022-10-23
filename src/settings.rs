@@ -1,4 +1,3 @@
-use dirs;
 use serde_derive::{Deserialize, Serialize};
 use std::{fs::File, io::Read};
 
@@ -34,25 +33,25 @@ pub fn read_settings() -> Settings {
         // TODO: Make this constant somehow.
         std::fs::write(home_dir, default_settings_str)
             .expect("Failed to write to settings.toml file!");
-        return default_settings;
+        default_settings
     } else {
         match File::open(home_dir) {
             Ok(mut file) => {
                 let mut file_content = String::new();
                 let res = file.read_to_string(&mut file_content);
 
-                if let Err(_) = res {
+                if res.is_err() {
                     warning("Failed to read text data from settings.toml, falling back on default settings.");
                     file_content = default_settings_str;
                 }
 
-                return toml::from_str(&file_content).unwrap_or(default_settings);
+                toml::from_str(&file_content).unwrap_or(default_settings)
             }
             Err(_) => {
                 warning("Failed to open settings.toml file for reading, falling back on default settings.");
-                return default_settings;
+                default_settings
             }
-        };
+        }
     }
 }
 

@@ -34,9 +34,10 @@ pub fn initialize_project(sub_path: Option<&String>) {
 }
 
 fn prompt_user_for_project_details() -> (String, String, String, String) {
-    let project_name = prompt("Project Name:").unwrap_or("Example".to_string());
+    let project_name = prompt("Project Name:").unwrap_or_else(|| "Example".to_string());
     let project_language = loop {
-        let input = prompt("Language (C/C++, default is C++):").unwrap_or("C++".to_string());
+        let input =
+            prompt("Language (C/C++, default is C++):").unwrap_or_else(|| "C++".to_string());
         let processed_input = input.trim().to_lowercase();
 
         if processed_input.is_empty() {
@@ -52,15 +53,16 @@ fn prompt_user_for_project_details() -> (String, String, String, String) {
             }
         }
     };
-    let project_version = prompt("Version:").unwrap_or("1.0.0".to_string());
-    let project_authors = prompt("Authors:").unwrap_or("[Author Name] <[email]>".to_string());
+    let project_version = prompt("Version:").unwrap_or_else(|| "1.0.0".to_string());
+    let project_authors =
+        prompt("Authors:").unwrap_or_else(|| "[Author Name] <[email]>".to_string());
 
-    return (
+    (
         project_name,
         project_language,
         project_version,
         project_authors,
-    );
+    )
 }
 
 fn write_project_files(config: &config::Config, sub_path: Option<&String>) {
