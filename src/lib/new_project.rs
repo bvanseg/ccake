@@ -11,7 +11,7 @@ pub fn initialize_project(sub_path: Option<&String>) {
         None => std::path::Path::new("ccake.toml").to_path_buf(),
     };
 
-    if path.exists() {
+    if let Ok(true) = path.try_exists() {
         terminal::ansi::error("Project already exists in the target directory.");
         return;
     }
