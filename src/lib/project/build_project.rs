@@ -78,7 +78,7 @@ fn collect_cxx_file_paths(config: &Config, src_dirs: &[String]) -> Vec<String> {
             .into_iter()
             .filter_entry(|p| {
                 let path_str = p.file_name().to_string_lossy();
-                path_str.starts_with(src_dir) || path_str.ends_with(target_extension)
+                p.path().is_dir() || path_str.ends_with(target_extension)
             })
             .filter_map(|r| r.ok());
 
