@@ -1,10 +1,21 @@
 use clap::crate_version;
 
+use crate::terminal;
 use crate::terminal::ansi::error;
 use crate::terminal::prompt::prompt;
 use crate::{config::Config, HELLO_C, HELLO_CPP};
 
 pub fn initialize_project(sub_path: Option<&String>) {
+    let path = match sub_path {
+        Some(path) => std::path::Path::new(path).join("ccake.toml"),
+        None => std::path::Path::new("ccake.toml").to_path_buf(),
+    };
+
+    if let Ok(true) = path.try_exists() {
+        terminal::ansi::error("Project already exists in the target directory.");
+        return;
+    }
+
     let (project_name, project_language, project_version, project_authors) =
         prompt_user_for_project_details();
 
