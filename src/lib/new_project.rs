@@ -6,8 +6,13 @@ use crate::terminal::prompt::prompt;
 use crate::{config::Config, HELLO_C, HELLO_CPP};
 
 pub fn initialize_project(sub_path: Option<&String>) {
-    if sub_path == None && std::path::Path::new("ccake.toml").exists() {
-        terminal::ansi::error("Project already exists in current directory.");
+    let path = match sub_path {
+        Some(path) => std::path::Path::new(path).join("ccake.toml"),
+        None => std::path::Path::new("ccake.toml").to_path_buf(),
+    };
+
+    if path.exists() {
+        terminal::ansi::error("Project already exists in the target directory.");
         return;
     }
 
