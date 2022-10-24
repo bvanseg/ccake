@@ -46,7 +46,6 @@ pub fn build_project(arg_matches: &ArgMatches) {
         }
     };
 
-    let out_dir = config.out_dir();
     let out_file_path = std::path::Path::new(&out_dir);
 
     std::fs::create_dir_all(&out_file_path)
