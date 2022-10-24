@@ -68,7 +68,11 @@ fn write_project_files(config: &Config, sub_path: Option<&String>) {
 }
 
 fn write_hello_world(config: &Config, sub_path: &Option<&String>) {
-    let src_dir = config.src_dir();
+    let src_dir = config
+        .src_dirs()
+        .into_iter()
+        .next()
+        .unwrap_or_else(|| "src".to_string());
 
     let lowercase_language = config.project_properties.language.to_lowercase();
     let lang_str = lowercase_language.as_str();
