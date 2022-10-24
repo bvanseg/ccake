@@ -1,21 +1,20 @@
-use clap::ArgMatches;
+use crate::lib;
 
-use crate::settings::Settings;
+pub fn new() -> clap::Command {
+    clap::Command::new("configure")
+        .about("Configure CCake's global properties.")
+        .arg(
+            clap::Arg::new("default-c-compiler-dir")
+                .help("The path to the default C compiler to be used for building projects.")
+                .long("c-compiler-dir"),
+        )
+        .arg(
+            clap::Arg::new("default-cpp-compiler-dir")
+                .help("The path to the default C++ compiler to be used for building projects.")
+                .long("cpp-compiler-dir"),
+        )
+}
 
-pub fn configure(arg_matches: &ArgMatches) {
-    let mut current_settings = &mut Settings::read();
-
-    if let Ok(Some(default_c_compiler_dir)) =
-        arg_matches.try_get_one::<String>("default-c-compiler-dir")
-    {
-        current_settings.default_c_compiler_dir = default_c_compiler_dir.to_string();
-    }
-
-    if let Ok(Some(default_cpp_compiler_dir)) =
-        arg_matches.try_get_one::<String>("default-cpp-compiler-dir")
-    {
-        current_settings.default_cpp_compiler_dir = default_cpp_compiler_dir.to_string();
-    }
-
-    Settings::write(current_settings);
+pub fn exec(arg_matches: &clap::ArgMatches) {
+    lib::configure::configure(arg_matches);
 }
