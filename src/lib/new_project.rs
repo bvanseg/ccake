@@ -1,35 +1,20 @@
 use clap::crate_version;
 
-use crate::config::write_config;
 use crate::terminal::ansi::error;
 use crate::terminal::prompt::prompt;
-use crate::{config, HELLO_C, HELLO_CPP};
+use crate::{config::Config, HELLO_C, HELLO_CPP};
 
 pub fn initialize_project(sub_path: Option<&String>) {
     let (project_name, project_language, project_version, project_authors) =
         prompt_user_for_project_details();
 
-    let config = config::Config {
-        project_properties: config::ProjectProperties {
-            project_name,
-            project_version,
-            authors: Some(
-                project_authors
-                    .trim()
-                    .split(',')
-                    .map(|f| f.trim().to_string())
-                    .collect(),
-            ),
-            ccake_version: crate_version!().to_string(),
-
-            language: project_language,
-            project_type: config::ProjectType::Binary,
-            src_dir: None,
-            out_dir: None,
-        },
-        compiler_properties: None,
-    };
-
+    let config = Config::new(
+        project_name,
+        project_version,
+        project_authors,
+        crate_version!().to_string(),
+        project_language,
+    );
     write_project_files(&config, sub_path);
 }
 
@@ -65,17 +50,13 @@ fn prompt_user_for_project_details() -> (String, String, String, String) {
     )
 }
 
-fn write_project_files(config: &config::Config, sub_path: Option<&String>) {
-    write_config(config, &sub_path);
+fn write_project_files(config: &Config, sub_path: Option<&String>) {
+    config.write(&sub_path);
     write_hello_world(config, &sub_path);
 }
 
-fn write_hello_world(config: &config::Config, sub_path: &Option<&String>) {
-    let src_dir = config
-        .project_properties
-        .src_dir
-        .to_owned()
-        .unwrap_or_else(|| "src".to_string());
+fn write_hello_world(config: &Config, sub_path: &Option<&String>) {
+    let src_dir = config.src_dir();
 
     let lowercase_language = config.project_properties.language.to_lowercase();
     let lang_str = lowercase_language.as_str();
