@@ -1,10 +1,10 @@
 use std::io::Write;
 
 #[cfg(unix)]
-static INSTALL_SCRIPT: &str = include_str!("../../res/install.sh");
+static INSTALL_SCRIPT: &str = include_str!("../../../res/install.sh");
 
 #[cfg(windows)]
-static INSTALL_SCRIPT: &str = include_str!("../../res/install.ps1");
+static INSTALL_SCRIPT: &str = include_str!("../../../res/install.ps1");
 
 pub fn install(tool_library_name: Option<&String>) {
     let mut dir =

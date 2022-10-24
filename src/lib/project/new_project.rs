@@ -1,9 +1,9 @@
 use clap::crate_version;
 
-use crate::terminal;
-use crate::terminal::ansi::error;
-use crate::terminal::prompt::prompt;
-use crate::{config::Config, HELLO_C, HELLO_CPP};
+use crate::lib::terminal;
+use crate::lib::terminal::ansi::error;
+use crate::lib::terminal::prompt::prompt;
+use crate::{lib::project::config::Config, HELLO_C, HELLO_CPP};
 
 pub fn initialize_project(sub_path: Option<&String>) {
     let path = match sub_path {

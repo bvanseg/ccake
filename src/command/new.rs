@@ -11,5 +11,5 @@ pub fn new() -> clap::Command {
 }
 
 pub fn exec(arg_matches: &clap::ArgMatches) {
-    lib::new_project::initialize_project(arg_matches.get_one::<String>("folder"));
+    lib::project::init(arg_matches.get_one::<String>("folder"));
 }

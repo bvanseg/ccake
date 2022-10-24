@@ -3,7 +3,7 @@ use std::io::Write;
 
 use fansi::string::AnsiString;
 
-use crate::terminal::ansi::ANSI_CHOICE_STYLE;
+use crate::lib::terminal::ansi::ANSI_CHOICE_STYLE;
 
 /**
  * Prompts a user for input, and returns the user's input back as a [String] type.

@@ -1,4 +1,3 @@
-pub mod build_project;
-pub mod configure;
-pub mod install;
-pub mod new_project;
+pub mod global;
+pub mod project;
+pub mod terminal;

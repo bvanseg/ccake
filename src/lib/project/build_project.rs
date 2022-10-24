@@ -1,7 +1,7 @@
 use crate::{
-    config::{Config, ProjectType},
-    settings::Settings,
-    terminal::ansi::ANSI_ERROR_STYLE,
+    lib::global::settings::Settings,
+    lib::project::config::{Config, ProjectType},
+    lib::terminal::ansi::ANSI_ERROR_STYLE,
 };
 use clap::ArgMatches;
 use fansi::{string::AnsiString, style::AnsiStyle};

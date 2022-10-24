@@ -5,5 +5,5 @@ pub fn new() -> clap::Command {
 }
 
 pub fn exec() {
-    lib::new_project::initialize_project(None);
+    lib::project::init(None);
 }
