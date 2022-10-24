@@ -11,5 +11,5 @@ pub fn new() -> clap::Command {
 }
 
 pub fn exec(arg_matches: &clap::ArgMatches) {
-    lib::install::install(arg_matches.get_one::<String>("tool-library-name"));
+    lib::project::install(arg_matches.get_one::<String>("tool-library-name"));
 }

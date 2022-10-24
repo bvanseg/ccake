@@ -20,5 +20,5 @@ pub fn new() -> clap::Command {
 }
 
 pub fn exec(arg_matches: &clap::ArgMatches) {
-    lib::build_project::build_project(arg_matches);
+    lib::project::build(arg_matches);
 }

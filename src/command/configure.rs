@@ -16,5 +16,5 @@ pub fn new() -> clap::Command {
 }
 
 pub fn exec(arg_matches: &clap::ArgMatches) {
-    lib::configure::configure(arg_matches);
+    lib::global::configure(arg_matches);
 }

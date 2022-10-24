@@ -1,6 +1,6 @@
 use clap::ArgMatches;
 
-use crate::settings::Settings;
+use crate::lib::global::settings::Settings;
 
 pub fn configure(arg_matches: &ArgMatches) {
     let mut current_settings = &mut Settings::read();

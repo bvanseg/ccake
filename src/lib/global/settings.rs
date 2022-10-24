@@ -1,7 +1,7 @@
 use serde_derive::{Deserialize, Serialize};
 use std::{fs::File, io::Read};
 
-use crate::terminal::ansi::warning;
+use crate::lib::terminal::ansi::warning;
 
 /// Global properties for ccake project
 /// For local properties, see Config

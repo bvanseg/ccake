@@ -4,13 +4,7 @@ use clap::{crate_authors, crate_description, crate_name, crate_version, Command}
 use fansi::windows::enable_ansi_support;
 
 mod command;
-mod config;
 mod lib;
-mod settings;
-mod terminal;
-
-static HELLO_C: &str = include_str!("../res/hello.c");
-static HELLO_CPP: &str = include_str!("../res/hello.cpp");
 
 fn main() {
     let command = Command::new(crate_name!())
