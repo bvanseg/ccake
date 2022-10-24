@@ -1,9 +1,10 @@
 use clap::crate_version;
 
+use crate::lib::constants;
+use crate::lib::project::config::Config;
 use crate::lib::terminal;
 use crate::lib::terminal::ansi::error;
 use crate::lib::terminal::prompt::prompt;
-use crate::{lib::project::config::Config, HELLO_C, HELLO_CPP};
 
 pub fn initialize_project(sub_path: Option<&String>) {
     let path = match sub_path {
@@ -73,8 +74,8 @@ fn write_hello_world(config: &Config, sub_path: &Option<&String>) {
     let lang_str = lowercase_language.as_str();
 
     let (main_file_name, main_file_content) = match lang_str {
-        "c" => ("main.c", HELLO_C),
-        "c++" | "cpp" => ("main.cpp", HELLO_CPP),
+        "c" => ("main.c", constants::HELLO_C),
+        "c++" | "cpp" => ("main.cpp", constants::HELLO_CPP),
         _ => panic!("Unknown project language specified in ccake.toml!"),
     };
 

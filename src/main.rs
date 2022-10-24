@@ -6,9 +6,6 @@ use fansi::windows::enable_ansi_support;
 mod command;
 mod lib;
 
-static HELLO_C: &str = include_str!("../res/hello.c");
-static HELLO_CPP: &str = include_str!("../res/hello.cpp");
-
 fn main() {
     let command = Command::new(crate_name!())
         .author(crate_authors!("\n"))

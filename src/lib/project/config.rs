@@ -1,7 +1,6 @@
+use crate::lib::constants;
 use serde_derive::{Deserialize, Serialize};
 use std::{fs::File, io::Read};
-
-const CCAKE_CONFIG_FILE_NAME: &str = "ccake.toml";
 
 #[derive(Debug, Deserialize, Serialize)]
 pub enum ProjectType {
@@ -66,7 +65,7 @@ impl Config {
     }
 
     pub fn read() -> Self {
-        let mut file = File::open(CCAKE_CONFIG_FILE_NAME)
+        let mut file = File::open(constants::CONFIG_FILE_NAME)
             .expect("Failed to open ccake.toml file for reading!");
 
         let mut file_content = String::new();
@@ -82,14 +81,14 @@ impl Config {
         let config_as_str = toml::to_string(&self).expect("Failed to serialize config to string!");
 
         if let Some(path) = sub_path {
-            let ccake_path = format!("{}{}{}", path, "/", CCAKE_CONFIG_FILE_NAME);
+            let ccake_path = format!("{}{}{}", path, "/", constants::CONFIG_FILE_NAME);
             std::fs::create_dir_all(path)
                 .expect("Failed to create directories to ccake.toml path!");
             std::fs::write(ccake_path, config_as_str).expect("Failed to write to ccake.toml file!");
             return;
         }
 
-        std::fs::write(CCAKE_CONFIG_FILE_NAME, config_as_str)
+        std::fs::write(constants::CONFIG_FILE_NAME, config_as_str)
             .expect("Failed to write to ccake.toml file!");
     }
 

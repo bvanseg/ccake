@@ -1,10 +1,5 @@
+use crate::lib::constants;
 use std::io::Write;
-
-#[cfg(unix)]
-static INSTALL_SCRIPT: &str = include_str!("../../../res/install.sh");
-
-#[cfg(windows)]
-static INSTALL_SCRIPT: &str = include_str!("../../../res/install.ps1");
 
 pub fn install(tool_library_name: Option<&String>) {
     let mut dir =
@@ -18,7 +13,8 @@ pub fn install(tool_library_name: Option<&String>) {
     dir.push("install.ps1");
 
     if !dir.exists() {
-        std::fs::write(&dir, INSTALL_SCRIPT).expect("Failed to write to install script file!");
+        std::fs::write(&dir, constants::INSTALL_SCRIPT)
+            .expect("Failed to write to install script file!");
     }
 
     #[cfg(unix)]
