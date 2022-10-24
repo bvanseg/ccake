@@ -10,6 +10,13 @@ pub fn new() -> clap::Command {
                 .long("static")
                 .action(clap::ArgAction::SetTrue),
         )
+        .arg(
+            clap::Arg::new("clean")
+                .help("Deletes the output directory prior to building.")
+                .short('c')
+                .long("clean")
+                .action(clap::ArgAction::SetTrue),
+        )
 }
 
 pub fn exec(arg_matches: &clap::ArgMatches) {

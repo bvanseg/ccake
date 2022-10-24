@@ -12,6 +12,17 @@ use walkdir::WalkDir;
 pub fn build_project(arg_matches: &ArgMatches) {
     let config = Config::read();
 
+    let out_dir = &config.out_dir();
+
+    if arg_matches.get_flag("clean") {
+        if let Err(e) = std::fs::remove_dir_all(&out_dir) {
+            match e.kind() {
+                std::io::ErrorKind::NotFound => (), // If the dir does not exist, no need to handle.
+                _ => panic!("Failed to delete '{}' directory! Error: {:?}", out_dir, e),
+            }
+        }
+    }
+
     let out_file = match config.project_properties.project_type {
         ProjectType::Binary => {
             if cfg!(windows) {
@@ -35,7 +46,6 @@ pub fn build_project(arg_matches: &ArgMatches) {
         }
     };
 
-    let out_dir = config.out_dir();
     let out_file_path = std::path::Path::new(&out_dir);
 
     std::fs::create_dir_all(&out_file_path)
