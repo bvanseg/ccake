@@ -1,11 +1,26 @@
 use crate::{config, settings, terminal::ansi::ANSI_ERROR_STYLE};
 use clap::ArgMatches;
 use fansi::{string::AnsiString, style::AnsiStyle};
-use std::{io::Write, path::Path};
+use std::{fs, io::Write, path::Path};
 use walkdir::WalkDir;
 
 pub fn build_project(arg_matches: &ArgMatches) {
     let config = config::read_config();
+
+    let out_dir = &config
+        .project_properties
+        .out_dir
+        .to_owned()
+        .unwrap_or_else(|| "out".to_string());
+
+    if arg_matches.get_flag("clean") {
+        if let Err(e) = fs::remove_dir_all(&out_dir) {
+            match e.kind() {
+                std::io::ErrorKind::NotFound => (), // If the dir does not exist, no need to handle.
+                _ => panic!("Failed to delete '{}' directory! Error: {:?}", out_dir, e),
+            }
+        }
+    }
 
     let out_file = match config.project_properties.project_type {
         config::ProjectType::Binary => {
@@ -29,12 +44,6 @@ pub fn build_project(arg_matches: &ArgMatches) {
             }
         }
     };
-
-    let out_dir = &config
-        .project_properties
-        .out_dir
-        .to_owned()
-        .unwrap_or_else(|| "out".to_string());
 
     // TODO: There has got to be a better/safer way of doing this...
     let out_file_path = std::path::Path::new("").join(out_dir);
