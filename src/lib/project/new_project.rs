@@ -14,7 +14,7 @@ pub fn initialize_project(sub_path: Option<&String>) {
 
     if let Ok(true) = path.try_exists() {
         terminal::ansi::error("Project already exists in the target directory.");
-        return;
+        std::process::exit(-1);
     }
 
     let (project_name, project_language, project_version, project_authors) =
