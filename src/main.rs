@@ -9,6 +9,15 @@ mod command;
 mod lib;
 
 fn main() {
+    // Initialize logging
+    simple_logger::SimpleLogger::new()
+        .with_level(match cfg!(debug_assertions) {
+            false => log::LevelFilter::Info,
+            true => log::LevelFilter::Trace
+        })
+        .init()
+        .expect("Failed to initialize logging");
+    
     let command = Command::new(crate_name!())
         .author(crate_authors!("\n"))
         .about(crate_description!())

@@ -23,6 +23,10 @@ log = "0.4.17"
 version = "4.0.15"
 features = ["cargo", "derive"]
 
+[dependencies.simple_logger]
+version = "3.0.0"
+features = ["stderr"]
+
 [target.'cfg(target_os="windows")'.dependencies.winapi]
 version = "0.3.4"
 features = ["consoleapi", "errhandlingapi", "fileapi", "handleapi", "processenv"]
