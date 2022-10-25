@@ -46,9 +46,13 @@ fn tool_alias(tool_name: Option<&String>) -> String {
 
 #[cfg(unix)]
 const fn aliases(tool_name: &str) -> &str {
-    match tool_name {
-        _ => tool_name,
-    }
+    tool_name
+    // NOTE: clippy complains when this match statement exists with
+    // no arms, but in the future, should we have aliases for linux
+    // as well, a match statement should be used
+    // match tool_name {
+    //     _ => tool_name,
+    // }
 }
 
 #[cfg(windows)]
