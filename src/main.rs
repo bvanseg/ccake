@@ -1,4 +1,5 @@
-#[macro_use] extern crate log;
+#[macro_use]
+extern crate log;
 
 use clap::{crate_authors, crate_description, crate_name, crate_version, Command};
 
@@ -13,12 +14,12 @@ fn main() {
     simple_logger::SimpleLogger::new()
         .with_level(match cfg!(debug_assertions) {
             false => log::LevelFilter::Info,
-            true => log::LevelFilter::Trace
+            true => log::LevelFilter::Trace,
         })
         .init()
         .expect("Failed to initialize logging");
-    
-    let command = Command::new(crate_name!())
+
+    let mut command = Command::new(crate_name!())
         .author(crate_authors!("\n"))
         .about(crate_description!())
         .version(crate_version!())
@@ -28,6 +29,7 @@ fn main() {
         .subcommand(command::install::new())
         .subcommand(command::configure::new());
 
+    let long_help_msg = command.render_long_help();
     let matches = command.get_matches();
 
     #[cfg(windows)]
@@ -40,6 +42,8 @@ fn main() {
         Some(("install", arg_matches)) => command::install::exec(arg_matches),
         Some(("configure", arg_matches)) => command::configure::exec(arg_matches),
         Some((_, _)) => (),
-        None => (),
+        None => {
+            println!("{}", long_help_msg);
+        }
     }
 }
