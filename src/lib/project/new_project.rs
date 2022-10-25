@@ -2,8 +2,6 @@ use clap::crate_version;
 
 use crate::lib::constants;
 use crate::lib::project::config::Config;
-use crate::lib::terminal;
-use crate::lib::terminal::ansi::error;
 use crate::lib::terminal::prompt::prompt;
 
 pub fn initialize_project(sub_path: Option<&String>) {
@@ -13,7 +11,7 @@ pub fn initialize_project(sub_path: Option<&String>) {
     };
 
     if let Ok(true) = path.try_exists() {
-        terminal::ansi::error("Project already exists in the target directory.");
+        error!("Project already exists in the target directory.");
         std::process::exit(-1);
     }
 
@@ -45,7 +43,7 @@ fn prompt_user_for_project_details() -> (String, String, String, String) {
             "c" | "c++" => break processed_input.to_uppercase(),
             "cpp" => break "C++".to_string(),
             _ => {
-                error("Value must be either 'C' or 'C++', please try again: ");
+                error!("Value must be either 'C' or 'C++', please try again: ");
                 continue;
             }
         }

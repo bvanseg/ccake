@@ -1,3 +1,5 @@
+#[macro_use] extern crate log;
+
 use clap::{crate_authors, crate_description, crate_name, crate_version, Command};
 
 #[cfg(windows)]
