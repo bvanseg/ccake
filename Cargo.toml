@@ -15,9 +15,17 @@ toml = "0.5.9"
 serde = "1.0.145"
 serde_derive = "1.0.145"
 walkdir = "2.3.2"
-clap = { version = "4.0.15", features = ["cargo", "derive"] }
 dirs = "4.0.0"
 fansi = "0.1.0"
+log = "0.4.17"
+
+[dependencies.clap]
+version = "4.0.15"
+features = ["cargo", "derive"]
+
+[dependencies.simple_logger]
+version = "3.0.0"
+features = ["stderr"]
 
 [target.'cfg(target_os="windows")'.dependencies.winapi]
 version = "0.3.4"

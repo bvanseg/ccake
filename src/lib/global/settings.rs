@@ -1,8 +1,6 @@
 use serde_derive::{Deserialize, Serialize};
 use std::{fs::File, io::Read};
 
-use crate::lib::terminal::ansi::warning;
-
 /// Global properties for ccake project
 /// For local properties, see Config
 #[derive(Debug, Deserialize, Serialize)]
@@ -44,14 +42,14 @@ impl Settings {
                     let res = file.read_to_string(&mut file_content);
 
                     if res.is_err() {
-                        warning("Failed to read text data from settings.toml, falling back on default settings.");
+                        warn!("Failed to read text data from settings.toml, falling back on default settings.");
                         file_content = default_settings_str;
                     }
 
                     toml::from_str(&file_content).unwrap_or(default_settings)
                 }
                 Err(_) => {
-                    warning("Failed to open settings.toml file for reading, falling back on default settings.");
+                    warn!("Failed to open settings.toml file for reading, falling back on default settings.");
                     default_settings
                 }
             }
