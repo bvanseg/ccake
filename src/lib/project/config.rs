@@ -17,7 +17,7 @@ pub struct ProjectProperties {
 
     pub language: String,
     pub project_type: ProjectType,
-    src_dir: Option<String>,
+    src_dir: Option<Vec<String>>,
     out_dir: Option<String>,
 }
 
@@ -99,11 +99,11 @@ impl Config {
             .unwrap_or_else(|| "out".to_string())
     }
 
-    pub fn src_dir(&self) -> String {
+    pub fn src_dirs(&self) -> Vec<String> {
         self.project_properties
             .src_dir
             .to_owned()
-            .unwrap_or_else(|| "src".to_string())
+            .unwrap_or_else(|| vec!["src".to_string()])
     }
 
     pub fn compiler_dir(&self) -> Option<&String> {

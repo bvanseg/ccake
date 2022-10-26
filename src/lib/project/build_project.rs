@@ -64,7 +64,7 @@ pub fn build_project(arg_matches: &ArgMatches) {
     execute_compiler(working_compiler_dir, project_args);
 }
 
-fn collect_cxx_file_paths(config: &Config, src_dir: &String) -> Vec<String> {
+fn collect_cxx_file_paths(config: &Config, src_dirs: &[String]) -> Vec<String> {
     let mut paths: Vec<String> = Vec::new();
 
     let target_extension = match config.project_properties.language.to_lowercase().as_str() {
@@ -73,21 +73,23 @@ fn collect_cxx_file_paths(config: &Config, src_dir: &String) -> Vec<String> {
         _ => panic!("Unknown project language specified in ccake.toml!"),
     };
 
-    let walker = WalkDir::new(src_dir)
-        .into_iter()
-        .filter_entry(|p| {
-            let path_str = p.file_name().to_string_lossy();
-            path_str.starts_with(src_dir) || path_str.ends_with(target_extension)
-        })
-        .filter_map(|r| r.ok());
+    for src_dir in src_dirs.iter() {
+        let walker = WalkDir::new(src_dir)
+            .into_iter()
+            .filter_entry(|p| {
+                let path_str = p.file_name().to_string_lossy();
+                p.path().is_dir() || path_str.ends_with(target_extension)
+            })
+            .filter_map(|r| r.ok());
 
-    for entry in walker {
-        if entry.path().is_dir() {
-            continue;
-        }
+        for entry in walker {
+            if entry.path().is_dir() {
+                continue;
+            }
 
-        if let Some(path_str) = entry.path().to_str() {
-            paths.push(path_str.to_string());
+            if let Some(path_str) = entry.path().to_str() {
+                paths.push(path_str.to_string());
+            }
         }
     }
 
@@ -105,8 +107,8 @@ fn compute_compiler_args(config: &Config, out_file_path: String) -> Vec<String> 
     .collect();
 
     // Collect C source files for inputting into the compiler.
-    let src_dir = config.src_dir();
-    let c_files = &mut collect_cxx_file_paths(config, &src_dir);
+    let src_dirs = config.src_dirs();
+    let c_files = &mut collect_cxx_file_paths(config, &src_dirs);
     project_args.append(c_files);
 
     // Try to append compiler arguments from config's compiler_args property.
