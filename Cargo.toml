@@ -26,7 +26,7 @@ log = "0.4.17"
 
 [dependencies.clap]
 version = "4.0.15"
-features = ["cargo", "derive"]
+features = ["cargo"]
 
 [dependencies.simple_logger]
 version = "3.0.0"
