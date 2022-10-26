@@ -1,4 +1,5 @@
-#[macro_use] extern crate log;
+#[macro_use]
+extern crate log;
 
 use clap::{crate_authors, crate_description, crate_name, crate_version, Command};
 
@@ -13,15 +14,16 @@ fn main() {
     simple_logger::SimpleLogger::new()
         .with_level(match cfg!(debug_assertions) {
             false => log::LevelFilter::Info,
-            true => log::LevelFilter::Trace
+            true => log::LevelFilter::Trace,
         })
         .init()
         .expect("Failed to initialize logging");
-    
+
     let command = Command::new(crate_name!())
         .author(crate_authors!("\n"))
         .about(crate_description!())
         .version(crate_version!())
+        .arg_required_else_help(true)
         .subcommand(command::new::new())
         .subcommand(command::init::new())
         .subcommand(command::build::new())
