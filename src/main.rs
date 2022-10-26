@@ -23,6 +23,7 @@ fn main() {
         .author(crate_authors!("\n"))
         .about(crate_description!())
         .version(crate_version!())
+        .arg_required_else_help(true)
         .subcommand(command::new::new())
         .subcommand(command::init::new())
         .subcommand(command::build::new())
