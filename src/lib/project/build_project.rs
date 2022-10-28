@@ -1,10 +1,8 @@
 use crate::{
     lib::global::settings::Settings,
     lib::project::config::{Config, ProjectType},
-    lib::terminal::ansi::ANSI_ERROR_STYLE,
 };
 use clap::ArgMatches;
-use fansi::{string::AnsiString, style::AnsiStyle};
 use std::io::Write;
 use std::path::Path;
 use walkdir::WalkDir;
@@ -159,16 +157,13 @@ fn execute_compiler(working_compiler_dir: String, project_args: Vec<String>) {
         .output()
         .expect("failed to execute compiler process!");
 
-    handle_compiler_stdout(&output.stdout, &[]);
-    handle_compiler_stdout(&output.stderr, &ANSI_ERROR_STYLE);
+    handle_compiler_stdout(&output.stdout);
+    handle_compiler_stdout(&output.stderr);
 }
 
-fn handle_compiler_stdout(output: &[u8], style: &[AnsiStyle]) {
+fn handle_compiler_stdout(output: &[u8]) {
     // If there was standard output from the compiler, emit it.
     let output_str =
         &String::from_utf8(output.to_vec()).expect("Failed to convert output stdout to String!");
-    let ansi_err_output = AnsiString::with_styles_arr(output_str, style);
-    std::io::stderr()
-        .write_all(ansi_err_output.to_string().as_bytes())
-        .unwrap();
+    std::io::stderr().write_all(output_str.as_bytes()).unwrap();
 }
