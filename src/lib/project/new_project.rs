@@ -2,7 +2,6 @@ use clap::crate_version;
 
 use crate::lib::constants;
 use crate::lib::project::config::Config;
-use crate::lib::terminal::prompt::prompt;
 
 pub fn initialize_project(sub_path: Option<&String>) {
     let path = match sub_path {
@@ -29,32 +28,46 @@ pub fn initialize_project(sub_path: Option<&String>) {
 }
 
 fn prompt_user_for_project_details() -> (String, String, String, String) {
-    let project_name = prompt("Project Name:").unwrap_or_else(|| "Example".to_string());
-    let project_language = loop {
-        let input =
-            prompt("Language (C/C++, default is C++):").unwrap_or_else(|| "C++".to_string());
-        let processed_input = input.trim().to_lowercase();
+    let project_name = dialoguer::Input::<String>::new()
+        .with_prompt("Project Name")
+        .default("Example Project".to_string())
+        .interact_text()
+        .unwrap_or_else(|_| "Example Project".to_string());
 
-        if processed_input.is_empty() {
-            break "C++".to_string();
-        }
+    let project_language = dialoguer::Input::<String>::new()
+        .with_prompt("Language (C/C++)")
+        .validate_with(|input: &String| -> Result<(), String> {
+            let processed_input = input.trim().to_lowercase();
 
-        match processed_input.as_str() {
-            "c" | "c++" => break processed_input.to_uppercase(),
-            "cpp" => break "C++".to_string(),
-            _ => {
-                error!("Value must be either 'C' or 'C++', please try again: ");
-                continue;
+            if processed_input.is_empty() {
+                return Ok(());
             }
-        }
-    };
-    let project_version = prompt("Version:").unwrap_or_else(|| "1.0.0".to_string());
-    let project_authors =
-        prompt("Authors:").unwrap_or_else(|| "[Author Name] <[email]>".to_string());
+
+            return match processed_input.as_str() {
+                "c" | "c++" => Ok(()),
+                "cpp" => Ok(()),
+                _ => Err("Value must be either 'C' or 'C++'!".to_string()),
+            };
+        })
+        .default("C++".to_string())
+        .interact_text()
+        .unwrap_or_else(|_| "C++".to_string());
+
+    let project_version = dialoguer::Input::<String>::new()
+        .with_prompt("Version")
+        .default("0.1.0".to_string())
+        .interact_text()
+        .unwrap_or_else(|_| "0.1.0".to_string());
+
+    let project_authors = dialoguer::Input::<String>::new()
+        .with_prompt("Authors")
+        .default("John Doe".to_string())
+        .interact_text()
+        .unwrap_or_else(|_| "John Doe".to_string());
 
     (
         project_name,
-        project_language,
+        project_language.as_str().to_uppercase(),
         project_version,
         project_authors,
     )

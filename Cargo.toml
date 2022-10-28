@@ -21,8 +21,8 @@ serde = "1.0.145"
 serde_derive = "1.0.145"
 walkdir = "2.3.2"
 dirs = "4.0.0"
-fansi = "0.1.0"
 log = "0.4.17"
+dialoguer = "0.10.2"
 
 [dependencies.clap]
 version = "4.0.15"
@@ -31,7 +31,3 @@ features = ["cargo"]
 [dependencies.simple_logger]
 version = "3.0.0"
 features = ["stderr"]
-
-[target.'cfg(target_os="windows")'.dependencies.winapi]
-version = "0.3.4"
-features = ["consoleapi", "errhandlingapi", "fileapi", "handleapi", "processenv"]
