@@ -74,6 +74,12 @@ impl Config {
 
         toml::from_str(&file_content).expect("Failed to deserialize content from ccake.toml file!")
     }
+
+    pub fn run(cmd: &str, args: Vec<&String>) {
+        let config = Self::read();
+        println!("Config: {:?}", config);
+        println!("cmd: {}, args: {:?}", cmd, args);
+    }
 }
 
 impl Config {
