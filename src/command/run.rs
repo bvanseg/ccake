@@ -23,7 +23,6 @@ pub fn exec(arg_matches: &ArgMatches) {
                 .get_many::<String>("args")
                 .map(|args| args.into_iter().collect())
                 .unwrap_or(vec![]);
-            println!("args: {:?}", extra_args);
             Config::run(cmd, extra_args);
         }
         None => unreachable!("Command must be called with the name of a command"),

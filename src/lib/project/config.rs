@@ -1,5 +1,8 @@
 use crate::lib::constants;
 use serde_derive::{Deserialize, Serialize};
+use std::collections::HashMap;
+use std::io::Write;
+use std::process::Command;
 use std::{fs::File, io::Read};
 
 #[derive(Debug, Deserialize, Serialize)]
@@ -17,6 +20,7 @@ pub struct ProjectProperties {
 
     pub language: String,
     pub project_type: ProjectType,
+    pub commands: Option<HashMap<String, String>>,
     src_dir: Option<Vec<String>>,
     out_dir: Option<String>,
 }
@@ -57,6 +61,7 @@ impl Config {
                 ccake_version,
                 language: project_language,
                 project_type: ProjectType::Binary,
+                commands: None,
                 src_dir: None,
                 out_dir: None,
             },
@@ -75,10 +80,23 @@ impl Config {
         toml::from_str(&file_content).expect("Failed to deserialize content from ccake.toml file!")
     }
 
-    pub fn run(cmd: &str, args: Vec<&String>) {
+    pub fn run(cmd: &str, extra_args: Vec<&String>) {
         let config = Self::read();
-        println!("Config: {:?}", config);
-        println!("cmd: {}, args: {:?}", cmd, args);
+        match config.project_properties.commands {
+            Some(commands) => {
+                if let Some(v) = commands.get(cmd) {
+                    let mut cmd_iter = v.split_whitespace();
+                    let bin: String = cmd_iter.next().unwrap().to_owned();
+                    let args: Vec<_> = cmd_iter.collect();
+                    execute_command(Command::new(bin).args(args).args(extra_args));
+                    return;
+                }
+                println!("{} not found in ccake.toml", cmd);
+            }
+            None => {
+                println!("No commands found in ccake.toml");
+            }
+        }
     }
 }
 
@@ -123,4 +141,18 @@ impl Config {
             .as_ref()
             .and_then(|f| f.compiler_args.as_ref())
     }
+}
+
+fn execute_command(c: &mut Command) {
+    let output = c.output().expect("failed to execute compiler process!");
+
+    handle_compiler_stdout(&output.stdout);
+    handle_compiler_stdout(&output.stderr);
+}
+
+fn handle_compiler_stdout(output: &[u8]) {
+    // If there was standard output from the compiler, emit it.
+    let output_str =
+        &String::from_utf8(output.to_vec()).expect("Failed to convert output stdout to String!");
+    std::io::stderr().write_all(output_str.as_bytes()).unwrap();
 }
