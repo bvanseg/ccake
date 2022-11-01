@@ -2,7 +2,7 @@ use crate::lib::constants;
 use serde_derive::{Deserialize, Serialize};
 use std::collections::HashMap;
 use std::io::Write;
-use std::process::Command;
+use std::process::{self, Command};
 use std::{fs::File, io::Read};
 
 #[derive(Debug, Deserialize, Serialize)]
@@ -79,25 +79,6 @@ impl Config {
 
         toml::from_str(&file_content).expect("Failed to deserialize content from ccake.toml file!")
     }
-
-    pub fn run(cmd: &str, extra_args: Vec<&String>) {
-        let config = Self::read();
-        match config.project_properties.commands {
-            Some(commands) => {
-                if let Some(v) = commands.get(cmd) {
-                    let mut cmd_iter = v.split_whitespace();
-                    let bin: String = cmd_iter.next().unwrap().to_owned();
-                    let args: Vec<_> = cmd_iter.collect();
-                    execute_command(Command::new(bin).args(args).args(extra_args));
-                    return;
-                }
-                println!("{} not found in ccake.toml", cmd);
-            }
-            None => {
-                println!("No commands found in ccake.toml");
-            }
-        }
-    }
 }
 
 impl Config {
@@ -140,6 +121,33 @@ impl Config {
         self.compiler_properties
             .as_ref()
             .and_then(|f| f.compiler_args.as_ref())
+    }
+}
+
+pub fn run_command(cmd: &str, extra_args: Vec<&String>) {
+    let config = Config::read();
+    log::debug!("config: {:?}", &config);
+    match config.project_properties.commands {
+        Some(commands) => {
+            if let Some(v) = commands.get(cmd) {
+                let mut cmd_iter = v.split_whitespace();
+                let bin: String = cmd_iter.next().unwrap().to_owned();
+                let args: Vec<_> = cmd_iter.collect();
+                log::debug!("bin: {}, args: {:?}", bin, args);
+
+                execute_command(Command::new(bin).args(args).args(extra_args));
+                return;
+            }
+            eprintln!(
+                "\"{}\" command not defined in ccake.toml 'project_properties.commands' section",
+                cmd
+            );
+            process::exit(1);
+        }
+        None => {
+            eprintln!("No 'project_properties.commands' were found in ccake.toml");
+            process::exit(1);
+        }
     }
 }
 

@@ -1,4 +1,4 @@
-use crate::lib::project::Config;
+use crate::lib;
 use clap::{arg, Arg, ArgMatches, Command};
 
 pub fn new() -> Command {
@@ -17,14 +17,10 @@ pub fn new() -> Command {
 }
 
 pub fn exec(arg_matches: &ArgMatches) {
-    match arg_matches.get_one::<String>("command") {
-        Some(cmd) => {
-            let extra_args: Vec<&String> = arg_matches
-                .get_many::<String>("args")
-                .map(|args| args.into_iter().collect())
-                .unwrap_or(vec![]);
-            Config::run(cmd, extra_args);
-        }
-        None => unreachable!("Command must be called with the name of a command"),
-    }
+    let cmd = arg_matches.get_one::<String>("command").unwrap();
+    let extra_args: Vec<&String> = arg_matches
+        .get_many::<String>("args")
+        .map(|args| args.into_iter().collect())
+        .unwrap_or(vec![]);
+    lib::project::run_command(cmd, extra_args);
 }
