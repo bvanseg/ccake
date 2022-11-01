@@ -21,6 +21,6 @@ pub fn exec(arg_matches: &ArgMatches) {
     let extra_args: Vec<&String> = arg_matches
         .get_many::<String>("args")
         .map(|args| args.into_iter().collect())
-        .unwrap_or(vec![]);
+        .unwrap_or_default();
     lib::project::run_command(cmd, extra_args);
 }
