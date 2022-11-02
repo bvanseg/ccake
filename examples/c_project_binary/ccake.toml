@@ -6,3 +6,9 @@ project_version = "0.1.0"
 authors = ["Boston Vanseghi"]
 language = "C"
 project_type = "Binary"
+
+[project_properties.commands]
+clean-build = "ccake build --clean"
+install-build = "ccake install && ccake build"
+ex-shell = "echo Hello World!"
+ex-python = "python3 example.py"

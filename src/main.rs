@@ -28,7 +28,8 @@ fn main() {
         .subcommand(command::init::new())
         .subcommand(command::build::new())
         .subcommand(command::install::new())
-        .subcommand(command::configure::new());
+        .subcommand(command::configure::new())
+        .subcommand(command::run::new());
 
     let matches = command.get_matches();
 
@@ -41,6 +42,7 @@ fn main() {
         Some(("build", arg_matches)) => command::build::exec(arg_matches),
         Some(("install", arg_matches)) => command::install::exec(arg_matches),
         Some(("configure", arg_matches)) => command::configure::exec(arg_matches),
+        Some(("run", arg_matches)) => command::run::exec(arg_matches),
         Some((_, _)) => (),
         None => (),
     }

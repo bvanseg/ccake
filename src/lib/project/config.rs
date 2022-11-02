@@ -1,5 +1,8 @@
 use crate::lib::constants;
 use serde_derive::{Deserialize, Serialize};
+use std::collections::HashMap;
+use std::io::Write;
+use std::process::{self, Command};
 use std::{fs::File, io::Read};
 
 #[derive(Debug, Deserialize, Serialize)]
@@ -17,6 +20,7 @@ pub struct ProjectProperties {
 
     pub language: String,
     pub project_type: ProjectType,
+    pub commands: Option<HashMap<String, String>>,
     src_dir: Option<Vec<String>>,
     out_dir: Option<String>,
 }
@@ -57,6 +61,7 @@ impl Config {
                 ccake_version,
                 language: project_language,
                 project_type: ProjectType::Binary,
+                commands: None,
                 src_dir: None,
                 out_dir: None,
             },
@@ -117,4 +122,40 @@ impl Config {
             .as_ref()
             .and_then(|f| f.compiler_args.as_ref())
     }
+}
+
+pub fn run_command(cmd_key: &str, extra_args: Vec<&String>) {
+    let config = Config::read();
+    log::debug!("config: {:?}", &config);
+    match config.project_properties.commands {
+        Some(commands) => {
+            if let Some(v) = commands.get(cmd_key) {
+                execute_command(Command::new("sh").arg("-c").arg(v).args(extra_args));
+                return;
+            }
+            eprintln!(
+                "\"{}\" command not defined in ccake.toml 'project_properties.commands' section",
+                cmd_key
+            );
+            process::exit(1);
+        }
+        None => {
+            eprintln!("No 'project_properties.commands' were found in ccake.toml");
+            process::exit(1);
+        }
+    }
+}
+
+fn execute_command(c: &mut Command) {
+    let output = c.output().expect("failed to execute compiler process!");
+
+    handle_compiler_stdout(&output.stdout);
+    handle_compiler_stdout(&output.stderr);
+}
+
+fn handle_compiler_stdout(output: &[u8]) {
+    // If there was standard output from the compiler, emit it.
+    let output_str =
+        &String::from_utf8(output.to_vec()).expect("Failed to convert output stdout to String!");
+    std::io::stderr().write_all(output_str.as_bytes()).unwrap();
 }
