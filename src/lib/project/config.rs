@@ -124,23 +124,18 @@ impl Config {
     }
 }
 
-pub fn run_command(cmd: &str, extra_args: Vec<&String>) {
+pub fn run_command(cmd_key: &str, extra_args: Vec<&String>) {
     let config = Config::read();
     log::debug!("config: {:?}", &config);
     match config.project_properties.commands {
         Some(commands) => {
-            if let Some(v) = commands.get(cmd) {
-                let mut cmd_iter = v.split_whitespace();
-                let bin: String = cmd_iter.next().unwrap().to_owned();
-                let args: Vec<_> = cmd_iter.collect();
-                log::debug!("bin: {}, args: {:?}", bin, args);
-
-                execute_command(Command::new(bin).args(args).args(extra_args));
+            if let Some(v) = commands.get(cmd_key) {
+                execute_command(Command::new("sh").arg("-c").arg(v).args(extra_args));
                 return;
             }
             eprintln!(
                 "\"{}\" command not defined in ccake.toml 'project_properties.commands' section",
-                cmd
+                cmd_key
             );
             process::exit(1);
         }
